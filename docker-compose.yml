@@ -1,0 +1,117 @@
+version: '3.8'
+
+services:
+  # MongoDB Database
+  mongodb:
+    image: mongo:7.0
+    container_name: devbattle-mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin123
+      MONGO_INITDB_DATABASE: devbattle
+    volumes:
+      - mongodb_data:/data/db
+      - ./mongo-init:/docker-entrypoint-initdb.d
+    networks:
+      - devbattle-network
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: devbattle-redis
+    restart: always
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes --requirepass redis123
+    volumes:
+      - redis_data:/data
+    networks:
+      - devbattle-network
+
+  # Backend API Server
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: devbattle-backend
+    restart: always
+    ports:
+      - "5000:5000"
+    environment:
+      NODE_ENV: production
+      PORT: 5000
+      MONGODB_URI: mongodb://admin:admin123@mongodb:27017/devbattle?authSource=admin
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: redis123
+      JWT_SECRET: your-super-secret-jwt-key-change-in-production
+      JWT_EXPIRE: 7d
+      JUDGE_SERVICE_URL: http://judge-service:8000
+      AWS_S3_BUCKET: devbattle-uploads
+      AWS_REGION: us-east-1
+    depends_on:
+      - mongodb
+      - redis
+      - judge-service
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    networks:
+      - devbattle-network
+
+  # Judge Service (Python)
+  judge-service:
+    build:
+      context: ./judge-service
+      dockerfile: Dockerfile
+    container_name: devbattle-judge
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      FLASK_ENV: production
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: redis123
+      DOCKER_HOST: unix:///var/run/docker.sock
+    depends_on:
+      - redis
+    volumes:
+      - ./judge-service:/app
+      - /var/run/docker.sock:/var/run/docker.sock
+    privileged: true
+    networks:
+      - devbattle-network
+
+  # Frontend (Next.js)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: devbattle-frontend
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:5000
+      NEXT_PUBLIC_WS_URL: http://localhost:5000
+      NODE_ENV: production
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
+    networks:
+      - devbattle-network
+
+networks:
+  devbattle-network:
+    driver: bridge
+
+volumes:
+  mongodb_data:
+  redis_data:

@@ -1,0 +1,37 @@
+{
+  "name": "devbattle",
+  "version": "1.0.0",
+  "description": "A developer-focused communication and coding competition platform",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend",
+    "judge-service"
+  ],
+  "scripts": {
+    "install:all": "npm install && cd frontend && npm install && cd ../backend && npm install && cd ../judge-service && pip install -r requirements.txt",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\" \"npm run dev:judge\"",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:judge": "cd judge-service && python app.py",
+    "build": "npm run build:frontend && npm run build:backend",
+    "build:frontend": "cd frontend && npm run build",
+    "build:backend": "cd backend && npm run build",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:build": "docker-compose build",
+    "start": "docker-compose up"
+  },
+  "keywords": [
+    "devbattle",
+    "coding-competition",
+    "messaging",
+    "leetcode",
+    "whatsapp"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

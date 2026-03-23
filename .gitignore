@@ -1,0 +1,67 @@
+# Environment variables
+.env
+.env.local
+.env.production
+.env.development
+
+# Dependencies
+node_modules/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+venv/
+env/
+ENV/
+
+# Build outputs
+.next/
+out/
+dist/
+build/
+*.tsbuildinfo
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Testing
+coverage/
+.nyc_output
+
+# Docker
+docker-compose.override.yml
+
+# Data
+data/
+*.sqlite
+*.db
+
+# Uploads
+uploads/
+temp/
+
+# Misc
+.cache/
+.temp/
+.tmp/
