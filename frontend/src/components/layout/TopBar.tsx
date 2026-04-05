@@ -12,19 +12,16 @@ import {
 import { Menu, Transition } from '@headlessui/react'
 import { useAuthStore, useNotificationStore } from '@/lib/store'
 import { userAPI } from '@/lib/api'
-
 interface TopBarProps {
   onToggleRightPanel?: () => void
   title?: string
   subtitle?: string
 }
-
 export default function TopBar({ onToggleRightPanel, title, subtitle }: TopBarProps) {
   const router = useRouter()
   const { user, logout } = useAuthStore()
   const { unreadCount } = useNotificationStore()
   const [pendingFriends, setPendingFriends] = useState(0)
-
   const loadPending = useCallback(async () => {
     try {
       const response = await userAPI.getFriends()
@@ -35,19 +32,16 @@ export default function TopBar({ onToggleRightPanel, title, subtitle }: TopBarPr
       console.error('Failed to load friend badge', error)
     }
   }, [])
-
   useEffect(() => {
     loadPending()
     const handler = () => loadPending()
     window.addEventListener('friends:update', handler)
     return () => window.removeEventListener('friends:update', handler)
   }, [loadPending])
-
   const handleLogout = () => {
     logout()
     router.push('/login')
   }
-
   return (
     <div className="h-16 bg-gray-950 border-b border-gray-800 flex items-center justify-between px-4">
       <div className="flex items-center gap-3">
@@ -65,12 +59,10 @@ export default function TopBar({ onToggleRightPanel, title, subtitle }: TopBarPr
           </div>
         )}
       </div>
-
       <div className="flex items-center gap-2">
         <button className="p-2 rounded-lg hover:bg-gray-800 transition">
           <MagnifyingGlassIcon className="w-5 h-5" />
         </button>
-
         <button
           onClick={() => router.push('/app/friends')}
           className="p-2 rounded-lg hover:bg-gray-800 transition relative"
@@ -82,7 +74,6 @@ export default function TopBar({ onToggleRightPanel, title, subtitle }: TopBarPr
             </span>
           )}
         </button>
-
         <button
           onClick={() => router.push('/app/notifications')}
           className="p-2 rounded-lg hover:bg-gray-800 transition relative"
@@ -94,8 +85,7 @@ export default function TopBar({ onToggleRightPanel, title, subtitle }: TopBarPr
             </span>
           )}
         </button>
-
-        {/* User Menu */}
+        {}
         <Menu as="div" className="relative">
           <Menu.Button className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-800 transition">
             {user?.avatar ? (
@@ -110,7 +100,6 @@ export default function TopBar({ onToggleRightPanel, title, subtitle }: TopBarPr
               </div>
             )}
           </Menu.Button>
-
           <Transition
             as={Fragment}
             enter="transition ease-out duration-100"
@@ -138,7 +127,6 @@ export default function TopBar({ onToggleRightPanel, title, subtitle }: TopBarPr
                   <span className="text-xs text-gray-400">{user?.rating || 0} pts</span>
                 </div>
               </div>
-
               <Menu.Item>
                 {({ active }) => (
                   <button
@@ -152,7 +140,6 @@ export default function TopBar({ onToggleRightPanel, title, subtitle }: TopBarPr
                   </button>
                 )}
               </Menu.Item>
-
               <Menu.Item>
                 {({ active }) => (
                   <button
@@ -165,9 +152,7 @@ export default function TopBar({ onToggleRightPanel, title, subtitle }: TopBarPr
                   </button>
                 )}
               </Menu.Item>
-
               <div className="border-t border-gray-700 mt-1"></div>
-
               <Menu.Item>
                 {({ active }) => (
                   <button
@@ -184,7 +169,6 @@ export default function TopBar({ onToggleRightPanel, title, subtitle }: TopBarPr
             </Menu.Items>
           </Transition>
         </Menu>
-
         {onToggleRightPanel && (
           <button 
             onClick={onToggleRightPanel}

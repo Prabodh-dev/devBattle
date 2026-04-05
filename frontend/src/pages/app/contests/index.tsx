@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import AppLayout from '@/components/layout/AppLayout'
 import { TrophyIcon, ClockIcon, UsersIcon, FlagIcon } from '@heroicons/react/24/outline'
-
 interface Contest {
   _id: string
   name: string
@@ -12,7 +11,6 @@ interface Contest {
   participants: number
   status: 'upcoming' | 'active' | 'completed'
 }
-
 export default function ContestsPage() {
   const [contests, setContests] = useState<Contest[]>([
     {
@@ -46,7 +44,6 @@ export default function ContestsPage() {
       status: 'completed'
     }
   ])
-
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'upcoming':
@@ -57,7 +54,6 @@ export default function ContestsPage() {
         return <span className="px-3 py-1 bg-gray-700 text-gray-400 rounded-full text-xs font-semibold">Completed</span>
     }
   }
-
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)
     return date.toLocaleDateString('en-US', { 
@@ -67,11 +63,10 @@ export default function ContestsPage() {
       minute: '2-digit' 
     })
   }
-
   return (
     <AppLayout>
       <div className="h-full overflow-y-auto">
-        {/* Header */}
+        {}
         <div className="bg-gray-950 border-b border-gray-800 p-6">
           <div className="flex items-center justify-between mb-4">
             <div>
@@ -82,8 +77,7 @@ export default function ContestsPage() {
               Create Contest
             </button>
           </div>
-
-          {/* Filter Tabs */}
+          {}
           <div className="flex gap-4">
             <button className="px-4 py-2 bg-indigo-600 rounded-lg font-medium">
               All Contests
@@ -99,8 +93,7 @@ export default function ContestsPage() {
             </button>
           </div>
         </div>
-
-        {/* Contests List */}
+        {}
         <div className="p-6">
           <div className="space-y-4">
             {contests.map((contest) => (
@@ -120,7 +113,6 @@ export default function ContestsPage() {
                   </div>
                   <TrophyIcon className="w-8 h-8 text-yellow-500 flex-shrink-0 ml-4" />
                 </div>
-
                 <div className="grid grid-cols-4 gap-4 mb-4">
                   <div className="flex items-center gap-2 text-sm text-gray-400">
                     <ClockIcon className="w-4 h-4" />
@@ -139,7 +131,6 @@ export default function ContestsPage() {
                     <span>{contest.participants} participants</span>
                   </div>
                 </div>
-
                 <div className="flex gap-3">
                   {contest.status === 'upcoming' && (
                     <button className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 rounded-lg font-medium transition">

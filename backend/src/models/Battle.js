@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-
 const battleSchema = new mongoose.Schema(
   {
     challenger: {
@@ -33,7 +32,7 @@ const battleSchema = new mongoose.Schema(
     },
     duration: {
       type: Number,
-      default: 1800000, // 30 minutes in milliseconds
+      default: 1800000, 
     },
     submissions: [
       {
@@ -60,11 +59,8 @@ const battleSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
-
-// Index for efficient querying
 battleSchema.index({ challenger: 1 });
 battleSchema.index({ opponent: 1 });
 battleSchema.index({ status: 1 });
 battleSchema.index({ roomId: 1 });
-
 module.exports = mongoose.model('Battle', battleSchema);

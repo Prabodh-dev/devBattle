@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-
 const problemSchema = new mongoose.Schema(
   {
     title: {
@@ -44,11 +43,11 @@ const problemSchema = new mongoose.Schema(
     },
     timeLimit: {
       type: Number,
-      default: 2000, // milliseconds
+      default: 2000, 
     },
     memoryLimit: {
       type: Number,
-      default: 256, // MB
+      default: 256, 
     },
     hints: [String],
     solutionTemplate: {
@@ -83,11 +82,8 @@ const problemSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
-
-// Virtual for acceptance rate
 problemSchema.virtual('acceptanceRate').get(function () {
   if (this.stats.totalSubmissions === 0) return 0;
   return ((this.stats.acceptedSubmissions / this.stats.totalSubmissions) * 100).toFixed(2);
 });
-
 module.exports = mongoose.model('Problem', problemSchema);

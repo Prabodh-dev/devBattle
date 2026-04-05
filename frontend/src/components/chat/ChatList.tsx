@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-
 interface Chat {
   _id: string
   participants: Array<{
@@ -20,26 +19,21 @@ interface Chat {
   }
   unreadCount?: number
 }
-
 interface ChatListProps {
   chats: Chat[]
   currentUserId: string
 }
-
 export default function ChatList({ chats, currentUserId }: ChatListProps) {
   const router = useRouter()
   const [selectedChatId, setSelectedChatId] = useState<string | null>(null)
-
   const getOtherParticipant = (chat: Chat) => {
     return chat.participants.find(p => p._id !== currentUserId)
   }
-
   const formatTime = (dateString: string) => {
     const date = new Date(dateString)
     const now = new Date()
     const diff = now.getTime() - date.getTime()
     const hours = Math.floor(diff / (1000 * 60 * 60))
-    
     if (hours < 1) {
       const minutes = Math.floor(diff / (1000 * 60))
       return minutes < 1 ? 'Just now' : `${minutes}m ago`
@@ -49,7 +43,6 @@ export default function ChatList({ chats, currentUserId }: ChatListProps) {
       return date.toLocaleDateString()
     }
   }
-
   return (
     <div className="h-full overflow-y-auto">
       {chats.length === 0 ? (
@@ -70,7 +63,6 @@ export default function ChatList({ chats, currentUserId }: ChatListProps) {
           {chats.map((chat) => {
             const otherUser = getOtherParticipant(chat)
             if (!otherUser) return null
-
             return (
               <Link
                 key={chat._id}
@@ -81,7 +73,7 @@ export default function ChatList({ chats, currentUserId }: ChatListProps) {
                 onClick={() => setSelectedChatId(chat._id)}
               >
                 <div className="flex items-start gap-3">
-                  {/* Avatar */}
+                  {}
                   <div className="relative flex-shrink-0">
                     <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center font-semibold">
                       {otherUser.username[0].toUpperCase()}
@@ -90,8 +82,7 @@ export default function ChatList({ chats, currentUserId }: ChatListProps) {
                       <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-gray-900 rounded-full"></div>
                     )}
                   </div>
-
-                  {/* Chat Info */}
+                  {}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between mb-1">
                       <h3 className="font-semibold truncate">{otherUser.username}</h3>
@@ -110,8 +101,7 @@ export default function ChatList({ chats, currentUserId }: ChatListProps) {
                       <p className="text-sm text-gray-500 italic">No messages yet</p>
                     )}
                   </div>
-
-                  {/* Unread Badge */}
+                  {}
                   {chat.unreadCount && chat.unreadCount > 0 && (
                     <div className="flex-shrink-0">
                       <span className="inline-flex items-center justify-center w-6 h-6 bg-indigo-600 text-white text-xs font-semibold rounded-full">

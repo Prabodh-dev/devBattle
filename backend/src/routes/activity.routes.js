@@ -1,16 +1,32 @@
 const express = require('express');
 const { protect } = require('../middleware/auth');
-
 const router = express.Router();
-
-// Get activity feed
 router.get('/feed', protect, (req, res) => {
-  res.json({ success: true, message: 'Activity feed' });
+  const { page = 1, limit = 20 } = req.query;
+  res.json({ 
+    success: true, 
+    data: {
+      activities: [],
+      pagination: {
+        page: parseInt(page),
+        limit: parseInt(limit),
+        total: 0,
+        pages: 0
+      }
+    }
+  });
 });
-
-// Create activity
 router.post('/', protect, (req, res) => {
-  res.json({ success: true, message: 'Create activity' });
+  const { type, description } = req.body;
+  res.json({ 
+    success: true, 
+    data: {
+      id: Date.now().toString(),
+      user: req.user.id,
+      type,
+      description,
+      createdAt: new Date()
+    }
+  });
 });
-
 module.exports = router;

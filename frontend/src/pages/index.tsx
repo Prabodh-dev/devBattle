@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useAuthStore } from '@/lib/store'
-
 const highlights = [
   {
     icon: '💬',
@@ -21,14 +20,12 @@ const highlights = [
     description: 'Team-based tournaments with rolling leaderboards and commentary.'
   }
 ]
-
 const metrics = [
   { label: 'Developers waiting', value: '2,350+' },
   { label: 'Problems available', value: '180+' },
   { label: 'Avg. decision time', value: '180 sec' },
   { label: 'Supported languages', value: '5' }
 ]
-
 const featureGrid = [
   {
     title: 'Tactical Messaging',
@@ -51,15 +48,12 @@ const featureGrid = [
     theme: 'from-emerald-500/10 via-lime-400/10 to-transparent'
   }
 ]
-
 export default function Home() {
   const router = useRouter()
   const { isAuthenticated } = useAuthStore()
-
   useEffect(() => {
     const token = localStorage.getItem('token')
     const storedUser = localStorage.getItem('user')
-
     if (token && storedUser) {
       if (isAuthenticated) {
         router.replace('/app/chats')
@@ -68,22 +62,18 @@ export default function Home() {
       router.replace('/login')
     }
   }, [isAuthenticated, router])
-
   const heroStats = [
     { label: 'Latency', value: '45ms', detail: 'co-located edge mesh' },
     { label: 'Sandbox boots', value: '118/sec', detail: 'Docker + Firecracker' }
   ]
-
   return (
     <div className="min-h-screen bg-slate-950 text-slate-50">
       <Head>
         <title>DevBattle | Operate Like A Proving Ground</title>
       </Head>
-
       <div className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950" />
         <div className="absolute inset-0 opacity-30" style={{ backgroundImage: 'radial-gradient(circle at 20% 20%, rgba(56,189,248,.15), transparent 45%)' }} />
-
         <header className="relative z-10 border-b border-white/10">
           <div className="max-w-6xl mx-auto px-6 py-6 flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -108,7 +98,6 @@ export default function Home() {
             </div>
           </div>
         </header>
-
         <main className="relative z-10">
           <section className="max-w-6xl mx-auto px-6 py-24 grid gap-12 lg:grid-cols-[3fr,2fr] items-center">
             <div>
@@ -170,7 +159,6 @@ export default function Home() {
               </div>
             </div>
           </section>
-
           <section className="border-t border-white/5 bg-slate-950/60">
             <div className="max-w-6xl mx-auto px-6 py-20">
               <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
@@ -202,7 +190,6 @@ export default function Home() {
               </div>
             </div>
           </section>
-
           <section className="bg-black/30 border-t border-white/5">
             <div className="max-w-6xl mx-auto px-6 py-16 grid gap-10 lg:grid-cols-[1.2fr,1fr]">
               <div>
@@ -244,7 +231,6 @@ export default function Home() {
             </div>
           </section>
         </main>
-
         <footer className="relative z-10 border-t border-white/10 bg-slate-950">
           <div className="max-w-6xl mx-auto px-6 py-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
             <div>

@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import AppLayout from '@/components/layout/AppLayout'
 import { TrophyIcon, ClockIcon, CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline'
-
 interface LeaderboardEntry {
   rank: number
   user: {
@@ -14,7 +13,6 @@ interface LeaderboardEntry {
   solved: number
   time: number
 }
-
 interface Problem {
   _id: string
   title: string
@@ -23,13 +21,11 @@ interface Problem {
   solved: boolean
   attempts: number
 }
-
 export default function ContestDetailPage() {
   const router = useRouter()
   const { contestId } = router.query
   const [activeTab, setActiveTab] = useState<'problems' | 'leaderboard'>('problems')
-  const [timeRemaining, setTimeRemaining] = useState(5400) // 90 minutes
-
+  const [timeRemaining, setTimeRemaining] = useState(5400) 
   const problems: Problem[] = [
     { _id: 'p1', title: 'Two Sum', difficulty: 'Easy', points: 100, solved: true, attempts: 2 },
     { _id: 'p2', title: 'Binary Tree Level Order', difficulty: 'Medium', points: 200, solved: true, attempts: 1 },
@@ -37,7 +33,6 @@ export default function ContestDetailPage() {
     { _id: 'p4', title: 'Valid Parentheses', difficulty: 'Easy', points: 100, solved: false, attempts: 0 },
     { _id: 'p5', title: 'Longest Substring Without Repeating', difficulty: 'Medium', points: 200, solved: false, attempts: 1 }
   ]
-
   const leaderboard: LeaderboardEntry[] = [
     { rank: 1, user: { _id: 'u1', username: 'CodeMaster' }, score: 800, solved: 4, time: 3245 },
     { rank: 2, user: { _id: 'u2', username: 'AlgoExpert' }, score: 700, solved: 4, time: 4120 },
@@ -45,7 +40,6 @@ export default function ContestDetailPage() {
     { rank: 4, user: { _id: 'u4', username: 'You' }, score: 300, solved: 2, time: 1567 },
     { rank: 5, user: { _id: 'u5', username: 'PyMaster' }, score: 300, solved: 2, time: 2100 }
   ]
-
   useEffect(() => {
     const timer = setInterval(() => {
       setTimeRemaining(prev => {
@@ -56,17 +50,14 @@ export default function ContestDetailPage() {
         return prev - 1
       })
     }, 1000)
-
     return () => clearInterval(timer)
   }, [])
-
   const formatTime = (seconds: number) => {
     const hours = Math.floor(seconds / 3600)
     const mins = Math.floor((seconds % 3600) / 60)
     const secs = seconds % 60
     return `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
   }
-
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
       case 'Easy': return 'text-green-400 bg-green-900/20 border-green-700'
@@ -75,11 +66,9 @@ export default function ContestDetailPage() {
       default: return 'text-gray-400'
     }
   }
-
   const rightPanelContent = (
     <div className="p-4">
       <h3 className="text-lg font-bold mb-4">Contest Timer</h3>
-      
       <div className="bg-gray-800 rounded-lg p-4 mb-6">
         <div className="flex items-center gap-2 text-gray-400 mb-2">
           <ClockIcon className="w-4 h-4" />
@@ -89,7 +78,6 @@ export default function ContestDetailPage() {
           {formatTime(timeRemaining)}
         </div>
       </div>
-
       <div className="bg-gray-800 rounded-lg p-4 mb-4">
         <h4 className="text-sm font-semibold mb-3">Your Progress</h4>
         <div className="space-y-2">
@@ -107,7 +95,6 @@ export default function ContestDetailPage() {
           </div>
         </div>
       </div>
-
       <div className="bg-gray-800 rounded-lg p-4">
         <h4 className="text-sm font-semibold mb-2">Contest Info</h4>
         <div className="space-y-1 text-sm text-gray-400">
@@ -118,11 +105,10 @@ export default function ContestDetailPage() {
       </div>
     </div>
   )
-
   return (
     <AppLayout showRightPanel={true} rightPanelContent={rightPanelContent}>
       <div className="h-full flex flex-col">
-        {/* Header */}
+        {}
         <div className="bg-gray-950 border-b border-gray-800 p-6">
           <div className="flex items-center justify-between mb-4">
             <div>
@@ -133,8 +119,7 @@ export default function ContestDetailPage() {
               Active
             </div>
           </div>
-
-          {/* Tabs */}
+          {}
           <div className="flex gap-2">
             <button
               onClick={() => setActiveTab('problems')}
@@ -158,8 +143,7 @@ export default function ContestDetailPage() {
             </button>
           </div>
         </div>
-
-        {/* Content */}
+        {}
         <div className="flex-1 overflow-y-auto p-6">
           {activeTab === 'problems' ? (
             <div className="space-y-3">
@@ -177,7 +161,6 @@ export default function ContestDetailPage() {
                       ) : (
                         <div className="w-6 h-6 rounded-full border-2 border-gray-600 flex-shrink-0" />
                       )}
-                      
                       <div className="flex-1">
                         <div className="flex items-center gap-3 mb-1">
                           <h3 className="text-lg font-semibold group-hover:text-indigo-400 transition">
@@ -195,7 +178,6 @@ export default function ContestDetailPage() {
                         </div>
                       </div>
                     </div>
-
                     <button className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 rounded-lg font-medium transition">
                       {problem.solved ? 'View Solution' : 'Solve'}
                     </button>

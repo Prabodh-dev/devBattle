@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-
 const submissionSchema = new mongoose.Schema(
   {
     user: {
@@ -44,10 +43,10 @@ const submissionSchema = new mongoose.Schema(
       default: 'pending',
     },
     runtime: {
-      type: Number, // in milliseconds
+      type: Number, 
     },
     memory: {
-      type: Number, // in MB
+      type: Number, 
     },
     testCasesPassed: {
       type: Number,
@@ -81,11 +80,8 @@ const submissionSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
-
-// Index for efficient querying
 submissionSchema.index({ user: 1, problem: 1 });
 submissionSchema.index({ contest: 1 });
 submissionSchema.index({ battle: 1 });
 submissionSchema.index({ status: 1 });
-
 module.exports = mongoose.model('Submission', submissionSchema);

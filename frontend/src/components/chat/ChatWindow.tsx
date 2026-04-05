@@ -6,7 +6,6 @@ import {
   FaceSmileIcon,
   EllipsisVerticalIcon
 } from '@heroicons/react/24/outline'
-
 interface Message {
   _id: string
   sender: {
@@ -24,7 +23,6 @@ interface Message {
     user: string
   }>
 }
-
 interface ChatWindowProps {
   chatId: string
   otherUser: {
@@ -39,7 +37,6 @@ interface ChatWindowProps {
   onSendMessage: (content: string, type: 'text' | 'code', codeLanguage?: string) => void
   isTyping?: boolean
 }
-
 export default function ChatWindow({ 
   chatId, 
   otherUser, 
@@ -52,15 +49,12 @@ export default function ChatWindow({
   const [showCodeEditor, setShowCodeEditor] = useState(false)
   const [codeLanguage, setCodeLanguage] = useState('javascript')
   const messagesEndRef = useRef<HTMLDivElement>(null)
-
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }
-
   useEffect(() => {
     scrollToBottom()
   }, [messages])
-
   const handleSend = () => {
     if (messageText.trim()) {
       onSendMessage(messageText, showCodeEditor ? 'code' : 'text', showCodeEditor ? codeLanguage : undefined)
@@ -68,22 +62,19 @@ export default function ChatWindow({
       setShowCodeEditor(false)
     }
   }
-
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
       handleSend()
     }
   }
-
   const formatTime = (dateString: string) => {
     const date = new Date(dateString)
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
   }
-
   return (
     <div className="flex flex-col h-full bg-gray-900">
-      {/* Chat Header */}
+      {}
       <div className="h-16 bg-gray-950 border-b border-gray-800 flex items-center justify-between px-4">
         <div className="flex items-center gap-3">
           <div className="relative">
@@ -117,8 +108,7 @@ export default function ChatWindow({
           </button>
         </div>
       </div>
-
-      {/* Messages Area */}
+      {}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-center text-gray-500">
@@ -131,7 +121,6 @@ export default function ChatWindow({
           <>
             {messages.map((message) => {
               const isOwn = message.sender._id === currentUserId
-              
               return (
                 <div
                   key={message._id}
@@ -142,12 +131,10 @@ export default function ChatWindow({
                       {message.sender.username[0].toUpperCase()}
                     </div>
                   )}
-                  
                   <div className={`max-w-md ${isOwn ? 'items-end' : 'items-start'}`}>
                     {!isOwn && (
                       <p className="text-xs text-gray-400 mb-1 ml-1">{message.sender.username}</p>
                     )}
-                    
                     {message.type === 'code' ? (
                       <div className={`rounded-lg p-3 ${
                         isOwn ? 'bg-indigo-600' : 'bg-gray-800'
@@ -169,7 +156,6 @@ export default function ChatWindow({
                         <p className="text-sm break-words">{message.content}</p>
                       </div>
                     )}
-                    
                     <div className="flex items-center gap-2 mt-1 ml-1">
                       <span className="text-xs text-gray-500">{formatTime(message.createdAt)}</span>
                       {isOwn && (
@@ -179,7 +165,6 @@ export default function ChatWindow({
                       )}
                     </div>
                   </div>
-
                   {isOwn && (
                     <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center font-semibold text-sm flex-shrink-0">
                       You
@@ -206,8 +191,7 @@ export default function ChatWindow({
           </>
         )}
       </div>
-
-      {/* Input Area */}
+      {}
       <div className="border-t border-gray-800 p-4">
         {showCodeEditor && (
           <div className="mb-2 flex items-center gap-2">
@@ -231,7 +215,6 @@ export default function ChatWindow({
             </button>
           </div>
         )}
-        
         <div className="flex items-end gap-2">
           <div className="flex gap-2">
             <button 
@@ -256,7 +239,6 @@ export default function ChatWindow({
               <FaceSmileIcon className="w-5 h-5" />
             </button>
           </div>
-          
           <textarea
             value={messageText}
             onChange={(e) => setMessageText(e.target.value)}
@@ -266,7 +248,6 @@ export default function ChatWindow({
             rows={showCodeEditor ? 5 : 1}
             style={{ minHeight: showCodeEditor ? '120px' : '40px' }}
           />
-          
           <button
             onClick={handleSend}
             disabled={!messageText.trim()}

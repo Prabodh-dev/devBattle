@@ -6,7 +6,6 @@ import ChatWindow from '@/components/chat/ChatWindow'
 import { useAuthStore, useChatStore } from '@/lib/store'
 import { chatAPI } from '@/lib/api'
 import socketService from '@/lib/socket'
-
 export default function ChatsPage() {
   const router = useRouter()
   const { chatId } = router.query
@@ -15,57 +14,40 @@ export default function ChatsPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [filter, setFilter] = useState<'all' | 'unread' | 'groups'>('all')
-
-  // Load chats on mount
   useEffect(() => {
     loadChats()
   }, [])
-
-  // Load messages when chat is selected
   useEffect(() => {
     if (chatId) {
       loadMessages(chatId as string)
       markChatAsRead(chatId as string)
     }
   }, [chatId])
-
-  // Set up socket listeners
   useEffect(() => {
     const socket = socketService.getSocket()
     if (!socket) return
-
-    // Listen for new messages
     socket.on('message:new', (message: any) => {
       addMessage(message)
-      
-      // If message is in current chat, mark as read
       if (message.chat === chatId) {
         chatAPI.markAsRead(chatId as string).catch(console.error)
       }
     })
-
-    // Listen for typing indicators
     socket.on('user:typing', ({ userId, chatId: typingChatId }: any) => {
       if (typingChatId === chatId) {
         setTyping(userId, true)
-        // Clear typing after 3 seconds
         setTimeout(() => setTyping(userId, false), 3000)
       }
     })
-
     socket.on('user:stop-typing', ({ userId, chatId: typingChatId }: any) => {
       if (typingChatId === chatId) {
         setTyping(userId, false)
       }
     })
-
-    // Listen for read receipts
     socket.on('message:read', ({ chatId: readChatId }: any) => {
       if (readChatId === chatId) {
         markAsRead(readChatId)
       }
     })
-
     return () => {
       socket.off('message:new')
       socket.off('user:typing')
@@ -73,7 +55,6 @@ export default function ChatsPage() {
       socket.off('message:read')
     }
   }, [chatId, addMessage, setTyping, markAsRead])
-
   const loadChats = async () => {
     try {
       setLoading(true)
@@ -90,7 +71,6 @@ export default function ChatsPage() {
       setLoading(false)
     }
   }
-
   const loadMessages = async (chatId: string) => {
     try {
       const response = await chatAPI.getMessages(chatId)
@@ -101,7 +81,6 @@ export default function ChatsPage() {
       console.error('Failed to load messages:', err)
     }
   }
-
   const markChatAsRead = async (chatId: string) => {
     try {
       await chatAPI.markAsRead(chatId)
@@ -110,25 +89,18 @@ export default function ChatsPage() {
       console.error('Failed to mark chat as read:', err)
     }
   }
-
   const handleSendMessage = async (content: string, type: 'text' | 'code', codeLanguage?: string) => {
     if (!chatId) return
-
     try {
       const messageData: any = {
         content,
         type,
       }
-      
       if (codeLanguage) {
         messageData.codeLanguage = codeLanguage
       }
-
       const response = await chatAPI.sendMessage(chatId as string, messageData)
-      
       if (response.success) {
-        // Message will be added via socket event
-        // Emit via socket for real-time delivery
         const socket = socketService.getSocket()
         if (socket) {
           socket.emit('message:send', {
@@ -142,26 +114,20 @@ export default function ChatsPage() {
       alert('Failed to send message. Please try again.')
     }
   }
-
   const handleTyping = () => {
     if (!chatId) return
-    
     const socket = socketService.getSocket()
     if (socket) {
       socket.emit('user:typing', { chatId })
     }
   }
-
   const handleStopTyping = () => {
     if (!chatId) return
-    
     const socket = socketService.getSocket()
     if (socket) {
       socket.emit('user:stop-typing', { chatId })
     }
   }
-
-  // Filter chats based on selected filter
   const filteredChats = chats.filter(chat => {
     if (filter === 'unread') {
       return chat.unreadCount > 0
@@ -171,11 +137,9 @@ export default function ChatsPage() {
     }
     return true
   })
-
   const selectedChat = chats.find(c => c._id === chatId)
   const otherUser = selectedChat?.participants.find(p => p._id !== user?._id)
   const currentUserTyping = otherUser ? isTyping[otherUser._id] : false
-
   if (loading) {
     return (
       <AppLayout>
@@ -188,7 +152,6 @@ export default function ChatsPage() {
       </AppLayout>
     )
   }
-
   if (error) {
     return (
       <AppLayout>
@@ -206,11 +169,10 @@ export default function ChatsPage() {
       </AppLayout>
     )
   }
-
   return (
     <AppLayout>
       <div className="flex h-full">
-        {/* Chat List Panel */}
+        {}
         <div className="w-80 border-r border-gray-800 bg-gray-950 flex flex-col">
           <div className="p-4 border-b border-gray-800">
             <div className="flex items-center justify-between mb-4">
@@ -258,8 +220,7 @@ export default function ChatsPage() {
             )}
           </div>
         </div>
-
-        {/* Chat Window */}
+        {}
         <div className="flex-1">
           {chatId && selectedChat && otherUser ? (
             <ChatWindow

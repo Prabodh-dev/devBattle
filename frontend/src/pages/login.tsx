@@ -4,7 +4,6 @@ import { useRouter } from 'next/router'
 import Head from 'next/head'
 import { authAPI } from '@/lib/api'
 import { useAuthStore } from '@/lib/store'
-
 export default function LoginPage() {
   const router = useRouter()
   const { login, isAuthenticated } = useAuthStore()
@@ -14,27 +13,19 @@ export default function LoginPage() {
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-
-  // Redirect if already authenticated
   useEffect(() => {
     if (isAuthenticated) {
       router.push('/app/chats')
     }
   }, [isAuthenticated, router])
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
     setError('')
-
     try {
       const response = await authAPI.login(formData)
-      
       if (response.success) {
-        // Save user and token to store
         login(response.data.user, response.data.token)
-        
-        // Redirect to chats
         router.push('/app/chats')
       } else {
         setError(response.message || 'Login failed')
@@ -44,16 +35,14 @@ export default function LoginPage() {
       setLoading(false)
     }
   }
-
   return (
     <>
       <Head>
         <title>Login - DevBattle</title>
       </Head>
-
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center p-4">
         <div className="w-full max-w-md">
-          {/* Logo */}
+          {}
           <div className="text-center mb-8">
             <div className="inline-flex items-center gap-2 mb-4">
               <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center font-bold text-white text-xl">
@@ -63,15 +52,13 @@ export default function LoginPage() {
             <h1 className="text-3xl font-bold text-white mb-2">Welcome Back</h1>
             <p className="text-gray-400">Sign in to continue to DevBattle</p>
           </div>
-
-          {/* Login Form */}
+          {}
           <div className="bg-gray-800 rounded-2xl shadow-2xl p-8 border border-gray-700">
             {error && (
               <div className="mb-4 p-3 bg-red-900/20 border border-red-700 rounded-lg text-red-400 text-sm">
                 {error}
               </div>
             )}
-
             <form onSubmit={handleSubmit} className="space-y-5">
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
@@ -87,7 +74,6 @@ export default function LoginPage() {
                   placeholder="you@example.com"
                 />
               </div>
-
               <div>
                 <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-2">
                   Password
@@ -102,7 +88,6 @@ export default function LoginPage() {
                   placeholder="••••••••"
                 />
               </div>
-
               <div className="flex items-center justify-between">
                 <label className="flex items-center">
                   <input type="checkbox" className="mr-2 rounded bg-gray-900 border-gray-700" />
@@ -112,7 +97,6 @@ export default function LoginPage() {
                   Forgot password?
                 </Link>
               </div>
-
               <button
                 type="submit"
                 disabled={loading}
@@ -121,7 +105,6 @@ export default function LoginPage() {
                 {loading ? 'Signing in...' : 'Sign In'}
               </button>
             </form>
-
             <div className="mt-6 text-center">
               <p className="text-gray-400">
                 Don&apos;t have an account?{' '}
@@ -131,8 +114,7 @@ export default function LoginPage() {
               </p>
             </div>
           </div>
-
-          {/* Demo Credentials */}
+          {}
           <div className="mt-6 p-4 bg-gray-800/50 border border-gray-700 rounded-lg">
             <p className="text-xs text-gray-400 text-center mb-2 font-semibold">
               Quick Test Account

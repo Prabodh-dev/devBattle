@@ -3,7 +3,6 @@ import AppLayout from '@/components/layout/AppLayout'
 import { TrophyIcon, FireIcon, ChartBarIcon } from '@heroicons/react/24/outline'
 import { leaderboardAPI } from '@/lib/api'
 import { useAuthStore } from '@/lib/store'
-
 interface LeaderboardEntry {
   rank: number
   user: {
@@ -17,7 +16,6 @@ interface LeaderboardEntry {
   battlesWon: number
   contestsWon: number
 }
-
 export default function LeaderboardPage() {
   const { user } = useAuthStore()
   const [activeTab, setActiveTab] = useState<'global' | 'battles' | 'contests'>('global')
@@ -25,16 +23,13 @@ export default function LeaderboardPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [page, setPage] = useState(1)
-
   useEffect(() => {
     loadLeaderboard()
   }, [activeTab, page])
-
   const loadLeaderboard = async () => {
     try {
       setLoading(true)
       setError('')
-      
       let response
       if (activeTab === 'global') {
         response = await leaderboardAPI.getGlobalLeaderboard(page, 50)
@@ -43,9 +38,7 @@ export default function LeaderboardPage() {
       } else {
         response = await leaderboardAPI.getContestLeaderboard(page, 50)
       }
-
       if (response.success) {
-        // Transform the data to match our interface
         const transformedData = response.data.map((entry: any, index: number) => ({
           rank: (page - 1) * 50 + index + 1,
           user: entry.user,
@@ -66,7 +59,6 @@ export default function LeaderboardPage() {
       setLoading(false)
     }
   }
-
   const getTierColor = (tier: string) => {
     const colors: Record<string, string> = {
       'Beginner': 'text-gray-400',
@@ -77,14 +69,12 @@ export default function LeaderboardPage() {
     }
     return colors[tier] || 'text-gray-400'
   }
-
   const getTrophyColor = (rank: number) => {
     if (rank === 1) return 'text-yellow-400'
     if (rank === 2) return 'text-gray-300'
     if (rank === 3) return 'text-orange-600'
     return 'text-gray-600'
   }
-
   if (loading && leaderboard.length === 0) {
     return (
       <AppLayout>
@@ -97,11 +87,10 @@ export default function LeaderboardPage() {
       </AppLayout>
     )
   }
-
   return (
     <AppLayout>
       <div className="h-full overflow-y-auto">
-        {/* Header */}
+        {}
         <div className="bg-gradient-to-r from-yellow-900 via-orange-900 to-red-900 p-8">
           <div className="max-w-6xl mx-auto">
             <div className="flex items-center gap-4 mb-4">
@@ -111,8 +100,7 @@ export default function LeaderboardPage() {
                 <p className="text-gray-300">Top developers on DevBattle</p>
               </div>
             </div>
-
-            {/* Tabs */}
+            {}
             <div className="flex gap-2">
               <button
                 onClick={() => {
@@ -156,8 +144,7 @@ export default function LeaderboardPage() {
             </div>
           </div>
         </div>
-
-        {/* Error State */}
+        {}
         {error && (
           <div className="max-w-6xl mx-auto px-8 py-4">
             <div className="bg-red-900/20 border border-red-700 rounded-lg p-4 text-red-400">
@@ -171,12 +158,11 @@ export default function LeaderboardPage() {
             </div>
           </div>
         )}
-
-        {/* Top 3 Podium */}
+        {}
         {leaderboard.length >= 3 && (
         <div className="max-w-6xl mx-auto px-8 -mt-8">
           <div className="grid grid-cols-3 gap-4 mb-8">
-            {/* 2nd Place */}
+            {}
             <div className="bg-gray-800 rounded-xl p-6 border-2 border-gray-400 mt-8">
               <div className="text-center">
                 <div className="relative inline-block mb-3">
@@ -194,8 +180,7 @@ export default function LeaderboardPage() {
                 <div className="text-2xl font-bold text-gray-300">{leaderboard[1].rating}</div>
               </div>
             </div>
-
-            {/* 1st Place */}
+            {}
             <div className="bg-gradient-to-br from-yellow-900 to-yellow-700 rounded-xl p-6 border-2 border-yellow-400">
               <div className="text-center">
                 <TrophyIcon className="w-8 h-8 text-yellow-400 mx-auto mb-2" />
@@ -214,8 +199,7 @@ export default function LeaderboardPage() {
                 <div className="text-3xl font-bold text-yellow-400">{leaderboard[0].rating}</div>
               </div>
             </div>
-
-            {/* 3rd Place */}
+            {}
             <div className="bg-gray-800 rounded-xl p-6 border-2 border-orange-600 mt-8">
               <div className="text-center">
                 <div className="relative inline-block mb-3">
@@ -234,8 +218,7 @@ export default function LeaderboardPage() {
               </div>
             </div>
           </div>
-
-          {/* Full Leaderboard Table */}
+          {}
           <div className="bg-gray-800 rounded-xl border border-gray-700 overflow-hidden mb-8">
             <table className="w-full">
               <thead className="bg-gray-900 border-b border-gray-700">
@@ -287,8 +270,7 @@ export default function LeaderboardPage() {
           </div>
         </div>
         )}
-
-        {/* Empty State */}
+        {}
         {leaderboard.length === 0 && !loading && !error && (
           <div className="max-w-6xl mx-auto px-8 py-20 text-center">
             <TrophyIcon className="w-16 h-16 mx-auto mb-4 text-gray-600" />

@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-
 const testCaseSchema = new mongoose.Schema(
   {
     problem: {
@@ -32,8 +31,5 @@ const testCaseSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
-
-// Index for efficient querying
 testCaseSchema.index({ problem: 1 });
-
 module.exports = mongoose.model('TestCase', testCaseSchema);

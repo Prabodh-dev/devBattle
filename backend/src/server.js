@@ -6,31 +6,18 @@ const socketIO = require("socket.io");
 const logger = require("./utils/logger");
 const { initializeSocketIO } = require("./socket");
 const redisClient = require("./config/redis");
-
-// Load environment variables
 dotenv.config();
-
 const PORT = process.env.PORT || 5000;
-
-// Create HTTP server
 const httpServer = createServer(app);
-
-// Initialize Socket.IO
 const io = socketIO(httpServer, {
   cors: {
-    origin: process.env.CORS_ORIGIN || "http://localhost:3000",
+    origin: process.env.CORS_ORIGIN || "http:
     credentials: true,
   },
   transports: ["websocket", "polling"],
 });
-
-// Initialize Socket.IO handlers
 initializeSocketIO(io);
-
-// Make io accessible to routes
 app.set("io", io);
-
-// Database connection
 const connectDB = async () => {
   try {
     const conn = await mongoose.connect(process.env.MONGODB_URI, {
@@ -43,8 +30,6 @@ const connectDB = async () => {
     process.exit(1);
   }
 };
-
-// Connect to Redis
 const connectRedis = async () => {
   try {
     await redisClient.connect();
@@ -56,26 +41,19 @@ const connectRedis = async () => {
     );
   }
 };
-
-// Start server
 const startServer = async () => {
   await connectDB();
   await connectRedis();
-
   httpServer.listen(PORT, () => {
     logger.info(
       `Server running in ${process.env.NODE_ENV} mode on port ${PORT}`,
     );
   });
 };
-
-// Handle unhandled promise rejections
 process.on("unhandledRejection", (err) => {
   logger.error(`Unhandled Rejection: ${err.message}`);
   httpServer.close(() => process.exit(1));
 });
-
-// Handle SIGTERM
 process.on("SIGTERM", () => {
   logger.info("SIGTERM received. Shutting down gracefully...");
   httpServer.close(async () => {
@@ -84,7 +62,5 @@ process.on("SIGTERM", () => {
     logger.info("Process terminated");
   });
 });
-
 startServer();
-
 module.exports = { httpServer, io };

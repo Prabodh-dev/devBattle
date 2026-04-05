@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-
 const activitySchema = new mongoose.Schema(
   {
     user: {
@@ -51,9 +50,6 @@ const activitySchema = new mongoose.Schema(
     timestamps: true,
   }
 );
-
-// Index for efficient querying
 activitySchema.index({ user: 1, createdAt: -1 });
 activitySchema.index({ visibility: 1, createdAt: -1 });
-
 module.exports = mongoose.model('Activity', activitySchema);

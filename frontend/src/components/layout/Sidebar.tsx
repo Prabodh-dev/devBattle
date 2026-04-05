@@ -13,16 +13,13 @@ import {
   ChevronDoubleRightIcon,
   MagnifyingGlassIcon
 } from '@heroicons/react/24/outline'
-
 interface SidebarProps {
   collapsed: boolean
   onToggle: () => void
 }
-
 export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
   const router = useRouter()
   const [searchQuery, setSearchQuery] = useState('')
-
   const navigation = [
     { name: 'Chats', href: '/app/chats', icon: ChatBubbleLeftRightIcon },
     { name: 'Groups', href: '/app/groups', icon: UserGroupIcon },
@@ -32,9 +29,7 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
     { name: 'Friends', href: '/app/friends', icon: UserGroupIcon },
     { name: 'Leaderboard', href: '/app/leaderboard', icon: TrophyIcon },
   ]
-
   const isActive = (href: string) => router.pathname.startsWith(href)
-
   if (collapsed) {
     return (
       <div className="w-16 bg-gray-950 border-r border-gray-800 flex flex-col items-center py-4">
@@ -44,7 +39,6 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
         >
           <ChevronDoubleRightIcon className="w-5 h-5" />
         </button>
-
         {navigation.map((item) => (
           <Link
             key={item.name}
@@ -59,7 +53,6 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
             <item.icon className="w-6 h-6" />
           </Link>
         ))}
-
         <div className="mt-auto space-y-2">
           <Link
             href="/app/notifications"
@@ -86,10 +79,9 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
       </div>
     )
   }
-
   return (
     <div className="w-72 bg-gray-950 border-r border-gray-800 flex flex-col">
-      {/* Header */}
+      {}
       <div className="p-4 border-b border-gray-800">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
@@ -108,8 +100,7 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
             <ChevronDoubleLeftIcon className="w-5 h-5" />
           </button>
         </div>
-
-        {/* Search */}
+        {}
         <div className="relative">
           <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
           <input
@@ -121,8 +112,7 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
           />
         </div>
       </div>
-
-      {/* Navigation */}
+      {}
       <div className="flex-1 overflow-y-auto p-2">
         <nav className="space-y-1">
           {navigation.map((item) => (
@@ -141,8 +131,7 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
           ))}
         </nav>
       </div>
-
-      {/* Bottom Navigation */}
+      {}
       <div className="p-2 border-t border-gray-800 space-y-1">
         <Link
           href="/app/notifications"

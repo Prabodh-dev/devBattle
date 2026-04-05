@@ -10,7 +10,6 @@ import {
 } from '@heroicons/react/24/outline'
 import { useAuthStore } from '@/lib/store'
 import { authAPI, userAPI } from '@/lib/api'
-
 export default function ProfilePage() {
   const { user: authUser, updateUser } = useAuthStore()
   const [isEditing, setIsEditing] = useState(false)
@@ -22,22 +21,17 @@ export default function ProfilePage() {
     bio: '',
     languages: [] as string[]
   })
-
   useEffect(() => {
     loadProfileData()
   }, [])
-
   const loadProfileData = async () => {
     try {
       setLoading(true)
       setError('')
-      
-      // Load user profile and stats
       const [profileRes, statsRes] = await Promise.all([
         authAPI.getProfile(),
         userAPI.getUserStats(authUser?._id || '')
       ])
-
       if (profileRes.success && statsRes.success) {
         setStats(statsRes.data)
         setEditForm({
@@ -53,7 +47,6 @@ export default function ProfilePage() {
       setLoading(false)
     }
   }
-
   const handleSaveProfile = async () => {
     try {
       const response = await authAPI.updateProfile(editForm)
@@ -67,11 +60,9 @@ export default function ProfilePage() {
       alert(err.response?.data?.message || 'Failed to update profile')
     }
   }
-
   const formatJoinDate = (date: string) => {
     return new Date(date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
   }
-
   const getRankColor = (rank: string) => {
     const colors: Record<string, string> = {
       'Beginner': 'text-gray-400',
@@ -82,7 +73,6 @@ export default function ProfilePage() {
     }
     return colors[rank] || 'text-gray-400'
   }
-
   if (loading) {
     return (
       <AppLayout>
@@ -95,7 +85,6 @@ export default function ProfilePage() {
       </AppLayout>
     )
   }
-
   if (error) {
     return (
       <AppLayout>
@@ -113,11 +102,10 @@ export default function ProfilePage() {
       </AppLayout>
     )
   }
-
   return (
     <AppLayout>
       <div className="h-full overflow-y-auto">
-        {/* Profile Header */}
+        {}
         <div className="bg-gradient-to-r from-indigo-900 via-purple-900 to-pink-900 p-8">
           <div className="max-w-6xl mx-auto">
             <div className="flex items-start justify-between">
@@ -151,14 +139,12 @@ export default function ProfilePage() {
                 Edit Profile
               </button>
             </div>
-
             {authUser?.bio && (
               <p className="mt-6 text-gray-300 max-w-3xl">{authUser.bio}</p>
             )}
           </div>
         </div>
-
-        {/* Stats Grid */}
+        {}
         <div className="max-w-6xl mx-auto p-8">
           <div className="grid grid-cols-4 gap-4 mb-8">
             <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
@@ -168,7 +154,6 @@ export default function ProfilePage() {
               </div>
               <div className="text-3xl font-bold">{stats?.problemsSolved || 0}</div>
             </div>
-
             <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
               <div className="flex items-center gap-3 mb-2">
                 <TrophyIcon className="w-6 h-6 text-yellow-400" />
@@ -176,7 +161,6 @@ export default function ProfilePage() {
               </div>
               <div className="text-3xl font-bold">{stats?.battlesWon || 0}</div>
             </div>
-
             <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
               <div className="flex items-center gap-3 mb-2">
                 <ChartBarIcon className="w-6 h-6 text-green-400" />
@@ -184,7 +168,6 @@ export default function ProfilePage() {
               </div>
               <div className="text-3xl font-bold">{stats?.contestsParticipated || 0}</div>
             </div>
-
             <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
               <div className="flex items-center gap-3 mb-2">
                 <FireIcon className="w-6 h-6 text-orange-400" />
@@ -193,9 +176,8 @@ export default function ProfilePage() {
               <div className="text-3xl font-bold">{stats?.currentStreak || 0}</div>
             </div>
           </div>
-
           <div className="grid grid-cols-3 gap-6">
-            {/* Languages */}
+            {}
             <div className="col-span-1 bg-gray-800 rounded-xl p-6 border border-gray-700">
               <h2 className="text-lg font-bold mb-4">Languages</h2>
               <div className="flex flex-wrap gap-2">
@@ -213,8 +195,7 @@ export default function ProfilePage() {
                 )}
               </div>
             </div>
-
-            {/* Recent Activity */}
+            {}
             <div className="col-span-2 bg-gray-800 rounded-xl p-6 border border-gray-700">
               <h2 className="text-lg font-bold mb-4">Recent Activity</h2>
               <div className="space-y-3">
@@ -253,13 +234,11 @@ export default function ProfilePage() {
           </div>
         </div>
       </div>
-
-      {/* Edit Profile Modal */}
+      {}
       {isEditing && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
           <div className="bg-gray-800 rounded-2xl p-6 max-w-md w-full border border-gray-700">
             <h2 className="text-xl font-bold mb-4">Edit Profile</h2>
-            
             <form onSubmit={(e) => {
               e.preventDefault()
               handleSaveProfile()
@@ -273,7 +252,6 @@ export default function ProfilePage() {
                   className="w-full px-4 py-2 bg-gray-900 border border-gray-700 rounded-lg focus:outline-none focus:border-indigo-500"
                 />
               </div>
-
               <div>
                 <label className="block text-sm font-medium mb-2">Bio</label>
                 <textarea
@@ -283,7 +261,6 @@ export default function ProfilePage() {
                   className="w-full px-4 py-2 bg-gray-900 border border-gray-700 rounded-lg focus:outline-none focus:border-indigo-500 resize-none"
                 />
               </div>
-
               <div>
                 <label className="block text-sm font-medium mb-2">Preferred Languages</label>
                 <input
@@ -294,7 +271,6 @@ export default function ProfilePage() {
                   className="w-full px-4 py-2 bg-gray-900 border border-gray-700 rounded-lg focus:outline-none focus:border-indigo-500"
                 />
               </div>
-
               <div className="flex gap-3 pt-4">
                 <button
                   type="button"

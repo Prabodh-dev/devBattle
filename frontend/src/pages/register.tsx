@@ -4,7 +4,6 @@ import { useRouter } from 'next/router'
 import Head from 'next/head'
 import { authAPI } from '@/lib/api'
 import { useAuthStore } from '@/lib/store'
-
 export default function RegisterPage() {
   const router = useRouter()
   const { login, isAuthenticated } = useAuthStore()
@@ -16,43 +15,33 @@ export default function RegisterPage() {
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-
-  // Redirect if already authenticated
   useEffect(() => {
     if (isAuthenticated) {
       router.push('/app/chats')
     }
   }, [isAuthenticated, router])
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
     setError('')
-
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match')
       setLoading(false)
       return
     }
-
     if (formData.password.length < 6) {
       setError('Password must be at least 6 characters long')
       setLoading(false)
       return
     }
-
     try {
       const response = await authAPI.register({
         username: formData.username,
         email: formData.email,
         password: formData.password
       })
-      
       if (response.success) {
-        // Save user and token to store
         login(response.data.user, response.data.token)
-        
-        // Redirect to chats
         router.push('/app/chats')
       } else {
         setError(response.message || 'Registration failed')
@@ -62,16 +51,14 @@ export default function RegisterPage() {
       setLoading(false)
     }
   }
-
   return (
     <>
       <Head>
         <title>Sign Up - DevBattle</title>
       </Head>
-
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center p-4">
         <div className="w-full max-w-md">
-          {/* Logo */}
+          {}
           <div className="text-center mb-8">
             <div className="inline-flex items-center gap-2 mb-4">
               <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center font-bold text-white text-xl">
@@ -81,15 +68,13 @@ export default function RegisterPage() {
             <h1 className="text-3xl font-bold text-white mb-2">Join DevBattle</h1>
             <p className="text-gray-400">Create your developer account</p>
           </div>
-
-          {/* Register Form */}
+          {}
           <div className="bg-gray-800 rounded-2xl shadow-2xl p-8 border border-gray-700">
             {error && (
               <div className="mb-4 p-3 bg-red-900/20 border border-red-700 rounded-lg text-red-400 text-sm">
                 {error}
               </div>
             )}
-
             <form onSubmit={handleSubmit} className="space-y-5">
               <div>
                 <label htmlFor="username" className="block text-sm font-medium text-gray-300 mb-2">
@@ -105,7 +90,6 @@ export default function RegisterPage() {
                   placeholder="coolcoder123"
                 />
               </div>
-
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
                   Email
@@ -120,7 +104,6 @@ export default function RegisterPage() {
                   placeholder="you@example.com"
                 />
               </div>
-
               <div>
                 <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-2">
                   Password
@@ -135,7 +118,6 @@ export default function RegisterPage() {
                   placeholder="••••••••"
                 />
               </div>
-
               <div>
                 <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-300 mb-2">
                   Confirm Password
@@ -150,7 +132,6 @@ export default function RegisterPage() {
                   placeholder="••••••••"
                 />
               </div>
-
               <div className="flex items-start">
                 <input type="checkbox" required className="mt-1 mr-2 rounded bg-gray-900 border-gray-700" />
                 <span className="text-sm text-gray-400">
@@ -164,7 +145,6 @@ export default function RegisterPage() {
                   </Link>
                 </span>
               </div>
-
               <button
                 type="submit"
                 disabled={loading}
@@ -173,7 +153,6 @@ export default function RegisterPage() {
                 {loading ? 'Creating account...' : 'Create Account'}
               </button>
             </form>
-
             <div className="mt-6 text-center">
               <p className="text-gray-400">
                 Already have an account?{' '}
@@ -183,8 +162,7 @@ export default function RegisterPage() {
               </p>
             </div>
           </div>
-
-          {/* Features */}
+          {}
           <div className="mt-6 grid grid-cols-3 gap-4 text-center">
             <div>
               <div className="text-2xl mb-1">💬</div>

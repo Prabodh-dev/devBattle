@@ -13,7 +13,6 @@ import {
   SparklesIcon,
   ArrowPathIcon,
 } from '@heroicons/react/24/outline'
-
 type Developer = {
   _id: string
   username: string
@@ -22,7 +21,6 @@ type Developer = {
   avatar?: string
   languages?: string[]
 }
-
 type FriendRequest = {
   _id: string
   sender: Developer | string
@@ -31,7 +29,6 @@ type FriendRequest = {
   message?: string
   createdAt?: string
 }
-
 type FriendNetworkResponse = {
   friends?: Developer[]
   accepted?: Developer[]
@@ -42,7 +39,6 @@ type FriendNetworkResponse = {
   incoming?: FriendRequest[]
   outgoing?: FriendRequest[]
 }
-
 const getUserFromRequest = (request: FriendRequest, role: 'sender' | 'recipient'): Developer | null => {
   const value = request?.[role]
   if (!value) return null
@@ -54,46 +50,38 @@ const getUserFromRequest = (request: FriendRequest, role: 'sender' | 'recipient'
   }
   return value
 }
-
 const getUserIdFromRequest = (request: FriendRequest, role: 'sender' | 'recipient') => {
   const value = request?.[role] as Developer | string | undefined
   if (!value) return ''
   if (typeof value === 'string') return value
   return value._id
 }
-
 const formatRelativeTime = (timestamp?: string) => {
   if (!timestamp) return 'Just now'
   const now = Date.now()
   const date = new Date(timestamp).getTime()
   const diff = now - date
-
   const minutes = Math.floor(diff / (1000 * 60))
   const hours = Math.floor(diff / (1000 * 60 * 60))
   const days = Math.floor(diff / (1000 * 60 * 60 * 24))
-
   if (minutes < 1) return 'Just now'
   if (minutes < 60) return `${minutes}m ago`
   if (hours < 24) return `${hours}h ago`
   if (days < 7) return `${days}d ago`
   return new Date(timestamp).toLocaleDateString()
 }
-
 export default function FriendsPage() {
   const { user } = useAuthStore()
   const currentUserId = user?._id || ''
   const queryClient = useQueryClient()
-
   const [searchQuery, setSearchQuery] = useState('')
   const [searchResults, setSearchResults] = useState<Developer[]>([])
   const [searchError, setSearchError] = useState('')
   const [searchLoading, setSearchLoading] = useState(false)
-
   const emitFriendUpdate = useCallback(() => {
     if (typeof window === 'undefined') return
     window.dispatchEvent(new Event('friends:update'))
   }, [])
-
   const {
     data: networkData,
     isPending: networkLoading,
@@ -107,13 +95,11 @@ export default function FriendsPage() {
     return (response.data as FriendNetworkResponse) || {}
     },
   })
-
   const friends: Developer[] = networkData?.friends || networkData?.accepted || []
   const incomingRequests: FriendRequest[] =
     networkData?.pending?.incoming || networkData?.incoming || []
   const outgoingRequests: FriendRequest[] =
     networkData?.pending?.outgoing || networkData?.outgoing || []
-
   const fetchDevelopers = useCallback(
     async (query = '') => {
       try {
@@ -137,13 +123,11 @@ export default function FriendsPage() {
     },
     [currentUserId]
   )
-
   useEffect(() => {
     if (!currentUserId) return
     fetchDevelopers('')
   }, [currentUserId, fetchDevelopers])
   const refetchNetwork = () => queryClient.invalidateQueries({ queryKey: ['friends', 'network'] })
-
   const sendRequestMutation = useMutation({
     mutationFn: (developerId: string) => userAPI.sendFriendRequest(developerId),
     onSuccess: () => {
@@ -155,7 +139,6 @@ export default function FriendsPage() {
       toast.error(err.response?.data?.message || 'Unable to send request')
     },
   })
-
   const acceptMutation = useMutation({
     mutationFn: (requestId: string) => userAPI.respondToFriendRequest(requestId, 'accept'),
     onSuccess: () => {
@@ -167,7 +150,6 @@ export default function FriendsPage() {
       toast.error(err.response?.data?.message || 'Unable to accept request')
     },
   })
-
   const declineMutation = useMutation({
     mutationFn: ({ requestId, isIncoming }: { requestId: string; isIncoming: boolean }) =>
       isIncoming ? userAPI.respondToFriendRequest(requestId, 'decline') : userAPI.cancelFriendRequest(requestId),
@@ -180,7 +162,6 @@ export default function FriendsPage() {
       toast.error(err.response?.data?.message || 'Unable to update request')
     },
   })
-
   const summaries = useMemo(() => {
     return [
       {
@@ -203,13 +184,11 @@ export default function FriendsPage() {
       },
     ]
   }, [friends.length, incomingRequests.length, outgoingRequests.length])
-
   const isFriend = (developerId: string) => friends.some((friend) => friend._id === developerId)
   const isIncoming = (developerId: string) =>
     incomingRequests.some((request) => getUserIdFromRequest(request, 'sender') === developerId)
   const isOutgoing = (developerId: string) =>
     outgoingRequests.some((request) => getUserIdFromRequest(request, 'recipient') === developerId)
-
   const renderDeveloperCard = (developer: Developer) => {
     const statusLabel = isFriend(developer._id)
       ? 'Connected'
@@ -218,7 +197,6 @@ export default function FriendsPage() {
       : isOutgoing(developer._id)
       ? 'Pending'
       : null
-
     return (
       <div
         key={developer._id}
@@ -236,7 +214,6 @@ export default function FriendsPage() {
           )}
         </div>
         {developer.bio && <p className="text-sm text-gray-400 mb-4 line-clamp-2">{developer.bio}</p>}
-
         <div className="flex items-center justify-between">
           <div className="flex -space-x-2">
             {(developer.languages || []).slice(0, 3).map((lang) => (
@@ -266,7 +243,6 @@ export default function FriendsPage() {
       </div>
     )
   }
-
   return (
     <AppLayout>
       <div className="h-full overflow-y-auto">
@@ -297,7 +273,6 @@ export default function FriendsPage() {
               </button>
             </div>
           </div>
-
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
             {summaries.map((summary) => (
               <div
@@ -311,15 +286,13 @@ export default function FriendsPage() {
             ))}
           </div>
         </div>
-
         <div className="max-w-6xl mx-auto p-6 space-y-8">
           {networkError && (
             <div className="px-4 py-3 bg-red-900/20 border border-red-700 text-red-200 rounded-lg">
               {networkError.message}
             </div>
           )}
-
-          {/* Pending Requests */}
+          {}
           <section className="bg-gray-900 border border-gray-800 rounded-3xl p-6">
             <div className="flex items-center gap-3 mb-4">
               <UserGroupIcon className="w-6 h-6 text-indigo-400" />
@@ -328,7 +301,6 @@ export default function FriendsPage() {
                 <p className="text-sm text-gray-400">Manage who joins your arena</p>
               </div>
             </div>
-
             {incomingRequests.length === 0 && outgoingRequests.length === 0 ? (
               <div className="text-center py-12 text-gray-400">
                 <SparklesIcon className="w-10 h-10 mx-auto mb-3 text-gray-500" />
@@ -378,7 +350,6 @@ export default function FriendsPage() {
                     })}
                   </div>
                 </div>
-
                 <div className="bg-gray-800/60 border border-gray-700 rounded-2xl p-4">
                   <p className="text-sm uppercase tracking-[0.3em] text-gray-400 mb-3">Outgoing</p>
                   <div className="space-y-3">
@@ -410,8 +381,7 @@ export default function FriendsPage() {
               </div>
             )}
           </section>
-
-          {/* Connections */}
+          {}
           <section className="bg-gray-900 border border-gray-800 rounded-3xl p-6">
             <div className="flex items-center gap-3 mb-4">
               <SparklesIcon className="w-6 h-6 text-yellow-300" />
@@ -420,7 +390,6 @@ export default function FriendsPage() {
                 <p className="text-sm text-gray-400">Trusted developers ready to battle</p>
               </div>
             </div>
-
             {networkLoading ? (
               <div className="py-16 text-center text-gray-400">
                 <ArrowPathIcon className="w-6 h-6 mx-auto mb-3 animate-spin" />
@@ -449,8 +418,7 @@ export default function FriendsPage() {
               </div>
             )}
           </section>
-
-          {/* Discover */}
+          {}
           <section className="bg-gray-900 border border-gray-800 rounded-3xl p-6">
             <div className="flex items-center gap-3 mb-4">
               <MagnifyingGlassIcon className="w-6 h-6 text-sky-300" />
@@ -459,7 +427,6 @@ export default function FriendsPage() {
                 <p className="text-sm text-gray-400">Search by handle or scroll the live roster</p>
               </div>
             </div>
-
             <div className="relative mb-6">
               <MagnifyingGlassIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
               <input
@@ -481,11 +448,9 @@ export default function FriendsPage() {
                 Scan
               </button>
             </div>
-
             {searchError && (
               <div className="mb-4 px-4 py-3 bg-red-900/20 border border-red-700 text-red-200 rounded-lg">{searchError}</div>
             )}
-
             {searchLoading ? (
               <div className="py-16 text-center text-gray-400">
                 <ArrowPathIcon className="w-6 h-6 mx-auto mb-3 animate-spin" />

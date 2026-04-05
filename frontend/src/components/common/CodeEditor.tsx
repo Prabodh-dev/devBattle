@@ -1,7 +1,6 @@
 import { useState, useRef } from 'react'
 import Editor from '@monaco-editor/react'
 import { PlayIcon, ArrowPathIcon } from '@heroicons/react/24/solid'
-
 interface CodeEditorProps {
   language: string
   value: string
@@ -13,7 +12,6 @@ interface CodeEditorProps {
   showActions?: boolean
   theme?: 'vs-dark' | 'light'
 }
-
 const languageOptions = [
   { value: 'python', label: 'Python' },
   { value: 'javascript', label: 'JavaScript' },
@@ -21,7 +19,6 @@ const languageOptions = [
   { value: 'cpp', label: 'C++' },
   { value: 'c', label: 'C' }
 ]
-
 export default function CodeEditor({
   language,
   value,
@@ -35,11 +32,9 @@ export default function CodeEditor({
 }: CodeEditorProps) {
   const [isRunning, setIsRunning] = useState(false)
   const editorRef = useRef<any>(null)
-
   const handleEditorDidMount = (editor: any) => {
     editorRef.current = editor
   }
-
   const handleRun = async () => {
     if (onRun) {
       setIsRunning(true)
@@ -50,7 +45,6 @@ export default function CodeEditor({
       }
     }
   }
-
   return (
     <div className="flex flex-col h-full bg-gray-900 rounded-lg overflow-hidden border border-gray-800">
       {showActions && (

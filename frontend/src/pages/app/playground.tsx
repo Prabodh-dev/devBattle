@@ -2,33 +2,27 @@ import { useState } from 'react'
 import AppLayout from '@/components/layout/AppLayout'
 import CodeEditor from '@/components/common/CodeEditor'
 import { PlayIcon, ShareIcon, BookmarkIcon } from '@heroicons/react/24/outline'
-
 const starterCode = {
   python: '# Python Playground\nprint("Hello, DevBattle!")\n\ndef main():\n    # Your code here\n    pass\n\nif __name__ == "__main__":\n    main()',
-  javascript: '// JavaScript Playground\nconsole.log("Hello, DevBattle!");\n\nfunction main() {\n    // Your code here\n}\n\nmain();',
-  java: '// Java Playground\npublic class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello, DevBattle!");\n        // Your code here\n    }\n}',
-  cpp: '// C++ Playground\n#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << "Hello, DevBattle!" << endl;\n    // Your code here\n    return 0;\n}',
-  c: '// C Playground\n#include <stdio.h>\n\nint main() {\n    printf("Hello, DevBattle!\\n");\n    // Your code here\n    return 0;\n}'
+  javascript: '
+  java: '
+  cpp: '
+  c: '
 }
-
 export default function PlaygroundPage() {
   const [language, setLanguage] = useState('javascript')
   const [code, setCode] = useState(starterCode.javascript)
   const [output, setOutput] = useState('')
   const [isRunning, setIsRunning] = useState(false)
   const [executionTime, setExecutionTime] = useState<number | null>(null)
-
   const handleLanguageChange = (newLanguage: string) => {
     setLanguage(newLanguage)
     setCode(starterCode[newLanguage as keyof typeof starterCode] || '')
     setOutput('')
   }
-
   const handleRun = async () => {
     setIsRunning(true)
     setOutput('Running code...')
-    
-    // Simulate code execution
     setTimeout(() => {
       const mockOutput = `Hello, DevBattle!\n\nExecution completed successfully.`
       setOutput(mockOutput)
@@ -36,26 +30,22 @@ export default function PlaygroundPage() {
       setIsRunning(false)
     }, 1000)
   }
-
   const handleShare = () => {
     alert('Share functionality coming soon! Your code will be saved with a unique URL.')
   }
-
   const handleSave = () => {
     alert('Code snippet saved!')
   }
-
   return (
     <AppLayout>
       <div className="h-full flex flex-col bg-gray-900">
-        {/* Header */}
+        {}
         <div className="bg-gray-950 border-b border-gray-800 p-4">
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-xl font-bold mb-1">Code Playground</h1>
               <p className="text-sm text-gray-400">Write, run, and share code instantly</p>
             </div>
-            
             <div className="flex items-center gap-3">
               <div className="flex items-center gap-2">
                 <label className="text-sm text-gray-400">Language:</label>
@@ -71,7 +61,6 @@ export default function PlaygroundPage() {
                   <option value="c">C</option>
                 </select>
               </div>
-
               <button
                 onClick={handleSave}
                 className="flex items-center gap-2 px-3 py-2 bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-lg text-sm font-medium transition"
@@ -79,7 +68,6 @@ export default function PlaygroundPage() {
                 <BookmarkIcon className="w-4 h-4" />
                 Save
               </button>
-
               <button
                 onClick={handleShare}
                 className="flex items-center gap-2 px-3 py-2 bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-lg text-sm font-medium transition"
@@ -87,7 +75,6 @@ export default function PlaygroundPage() {
                 <ShareIcon className="w-4 h-4" />
                 Share
               </button>
-
               <button
                 onClick={handleRun}
                 disabled={isRunning}
@@ -99,10 +86,9 @@ export default function PlaygroundPage() {
             </div>
           </div>
         </div>
-
-        {/* Code Editor & Output */}
+        {}
         <div className="flex-1 flex overflow-hidden">
-          {/* Editor */}
+          {}
           <div className="flex-1 p-4">
             <CodeEditor
               language={language}
@@ -112,8 +98,7 @@ export default function PlaygroundPage() {
               showActions={false}
             />
           </div>
-
-          {/* Output Panel */}
+          {}
           <div className="w-96 border-l border-gray-800 flex flex-col">
             <div className="bg-gray-950 border-b border-gray-800 px-4 py-3">
               <div className="flex items-center justify-between">
@@ -125,14 +110,12 @@ export default function PlaygroundPage() {
                 )}
               </div>
             </div>
-
             <div className="flex-1 overflow-y-auto p-4">
               {output ? (
                 <div>
                   <pre className="text-sm font-mono text-green-400 whitespace-pre-wrap">
                     {output}
                   </pre>
-                  
                   {executionTime !== null && (
                     <div className="mt-4 p-3 bg-gray-800 rounded-lg">
                       <h4 className="text-sm font-semibold mb-2">Execution Stats</h4>

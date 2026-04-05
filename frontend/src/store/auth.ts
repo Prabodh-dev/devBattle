@@ -1,5 +1,4 @@
 import { create } from 'zustand'
-
 interface User {
   id: string
   username: string
@@ -15,7 +14,6 @@ interface User {
     totalBattles: number
   }
 }
-
 interface AuthState {
   user: User | null
   token: string | null
@@ -24,7 +22,6 @@ interface AuthState {
   logout: () => void
   updateUser: (user: Partial<User>) => void
 }
-
 export const useAuthStore = create<AuthState>((set) => ({
   user: null,
   token: null,

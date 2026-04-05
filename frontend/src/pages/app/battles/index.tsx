@@ -14,22 +14,18 @@ import {
 } from '@heroicons/react/24/outline'
 import { useAuthStore } from '@/lib/store'
 import { battleAPI, userAPI } from '@/lib/api'
-
 type BattleStatus = 'pending' | 'accepted' | 'in_progress' | 'declined' | 'completed' | 'cancelled'
-
 interface BattleUser {
   _id: string
   username: string
   rating: number
   avatar?: string
 }
-
 interface BattleProblem {
   _id: string
   title: string
   difficulty: 'Easy' | 'Medium' | 'Hard'
 }
-
 interface Battle {
   _id: string
   challenger: BattleUser
@@ -40,7 +36,6 @@ interface Battle {
   duration?: number
   createdAt: string
 }
-
 export default function BattlesPage() {
   const router = useRouter()
   const { user } = useAuthStore()
@@ -56,13 +51,11 @@ export default function BattlesPage() {
   const [acceptingBattleId, setAcceptingBattleId] = useState('')
   const [decliningBattleId, setDecliningBattleId] = useState('')
   const [opponentSearch, setOpponentSearch] = useState('')
-
   useEffect(() => {
     if (!currentUserId) return
     loadBattles()
     loadOpponents()
   }, [currentUserId])
-
   const loadBattles = async () => {
     try {
       setLoading(true)
@@ -78,7 +71,6 @@ export default function BattlesPage() {
       setLoading(false)
     }
   }
-
   const loadOpponents = async () => {
     try {
       const response = await userAPI.searchUsers('')
@@ -89,7 +81,6 @@ export default function BattlesPage() {
       console.error('Failed to load users:', err)
     }
   }
-
   const filteredBattles = useMemo(() => {
     return battles.filter((battle) => {
       if (activeTab === 'active') return battle.status === 'in_progress'
@@ -98,13 +89,11 @@ export default function BattlesPage() {
       return true
     })
   }, [battles, activeTab])
-
   const filteredOpponents = useMemo(() => {
     if (!opponentSearch.trim()) return availableUsers
     const query = opponentSearch.toLowerCase()
     return availableUsers.filter((candidate) => candidate.username.toLowerCase().includes(query))
   }, [availableUsers, opponentSearch])
-
   const summaryStats = useMemo(() => {
     const active = battles.filter((b) => b.status === 'in_progress').length
     const pending = battles.filter((b) => b.status === 'pending').length
@@ -118,7 +107,6 @@ export default function BattlesPage() {
     const winRate = completed > 0 ? Math.round((wins / completed) * 100) : 0
     return { active, pending, completed, winRate }
   }, [battles, currentUserId])
-
   const statusMeta: Record<BattleStatus, { label: string; className: string }> = {
     pending: {
       label: 'Pending',
@@ -145,7 +133,6 @@ export default function BattlesPage() {
       className: 'text-gray-300 border-gray-600 bg-gray-900/30',
     },
   }
-
   const summaryCards = [
     {
       label: 'Active Battles',
@@ -176,7 +163,6 @@ export default function BattlesPage() {
       accent: 'text-indigo-300',
     },
   ]
-
   const getDifficultyColor = (difficulty?: string) => {
     switch (difficulty) {
       case 'Easy':
@@ -189,24 +175,20 @@ export default function BattlesPage() {
         return 'text-gray-400 bg-gray-900/30 border-gray-700'
     }
   }
-
   const formatTime = (dateString: string) => {
     const date = new Date(dateString)
     const now = new Date()
     const diff = now.getTime() - date.getTime()
     const minutes = Math.floor(diff / (1000 * 60))
-
     if (minutes < 60) return `${minutes}m ago`
     const hours = Math.floor(minutes / 60)
     if (hours < 24) return `${hours}h ago`
     return date.toLocaleDateString()
   }
-
   const getOpponent = (battle: Battle) => {
     if (battle.challenger?._id === currentUserId) return battle.opponent
     return battle.challenger
   }
-
   const getInitials = (username?: string) => {
     if (!username) return '?'
     return username
@@ -215,28 +197,23 @@ export default function BattlesPage() {
       .join('')
       .slice(0, 2)
   }
-
   const isWinner = (battle: Battle) => {
     if (!battle.winner) return false
     if (typeof battle.winner === 'string') return battle.winner === currentUserId
     return battle.winner?._id === currentUserId
   }
-
   const closeCreateModal = () => {
     setShowCreateModal(false)
     setSelectedOpponent('')
     setOpponentSearch('')
   }
-
   const joinBattleRoom = (battleId: string) => {
     router.push(`/app/battles/${battleId}`)
   }
-
   const minutesFromDuration = (duration?: number) => {
     if (!duration) return 30
     return Math.max(5, Math.round(duration / 60000))
   }
-
   const handleCreateBattle = async () => {
     if (!selectedOpponent) return
     try {
@@ -252,7 +229,6 @@ export default function BattlesPage() {
       setCreatingBattle(false)
     }
   }
-
   const handleAcceptBattle = async (battleId: string) => {
     try {
       setAcceptingBattleId(battleId)
@@ -265,7 +241,6 @@ export default function BattlesPage() {
       setAcceptingBattleId('')
     }
   }
-
   const handleDeclineBattle = async (battleId: string) => {
     try {
       setDecliningBattleId(battleId)
@@ -278,7 +253,6 @@ export default function BattlesPage() {
       setDecliningBattleId('')
     }
   }
-
   return (
     <AppLayout>
       <div className="h-full overflow-y-auto">
@@ -290,7 +264,7 @@ export default function BattlesPage() {
             </div>
           </div>
         )}
-        {/* Header */}
+        {}
         <div className="bg-gray-950 border-b border-gray-800 p-6">
           <div className="flex items-center justify-between mb-4">
             <div>
@@ -305,8 +279,7 @@ export default function BattlesPage() {
               New Challenge
             </button>
           </div>
-
-          {/* Tabs */}
+          {}
             <div className="flex gap-2">
               <button
                 onClick={() => setActiveTab('active')}
@@ -339,13 +312,11 @@ export default function BattlesPage() {
                 History
               </button>
             </div>
-
           {error && (
             <div className="mt-4 px-4 py-3 bg-red-900/30 border border-red-700 text-red-200 rounded-lg">
               {error}
             </div>
           )}
-
           <div className="mt-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
             {summaryCards.map((card) => (
               <div key={card.label} className="bg-gray-900/60 border border-gray-800 rounded-2xl p-4 flex items-center gap-4">
@@ -361,8 +332,7 @@ export default function BattlesPage() {
             ))}
           </div>
         </div>
-
-        {/* Battles List */}
+        {}
         <div className="max-w-6xl mx-auto p-6">
           {filteredBattles.length === 0 ? (
             <div className="text-center py-20">
@@ -392,7 +362,6 @@ export default function BattlesPage() {
                 const awaitingCurrentUser = battle.status === 'pending' && battle.opponent?._id === currentUserId
                 const isChallenger = battle.challenger?._id === currentUserId
                 const status = statusMeta[battle.status]
-
                 return (
                   <div
                     key={battle._id}
@@ -400,7 +369,7 @@ export default function BattlesPage() {
                   >
                     <div className="flex items-center justify-between gap-6">
                       <div className="flex items-center gap-6 flex-1">
-                        {/* Self */}
+                        {}
                         <div className="flex items-center gap-3">
                           <div className="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-600 to-purple-600 flex items-center justify-center font-semibold">
                             {getInitials(selfUser?.username)}
@@ -410,10 +379,8 @@ export default function BattlesPage() {
                             <div className="text-sm text-gray-400">Rating: {selfUser?.rating ?? '—'}</div>
                           </div>
                         </div>
-
                         <div className="text-2xl font-bold text-gray-600">VS</div>
-
-                        {/* Opponent */}
+                        {}
                         <div className="flex items-center gap-3">
                           <div className="w-12 h-12 rounded-full bg-gray-700 flex items-center justify-center font-semibold">
                             {getInitials(opponent?.username)}
@@ -423,10 +390,8 @@ export default function BattlesPage() {
                             <div className="text-sm text-gray-400">Rating: {opponent?.rating ?? '—'}</div>
                           </div>
                         </div>
-
                         <div className="h-12 w-px bg-gray-700" />
-
-                        {/* Problem */}
+                        {}
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-1">
                             <h3 className="font-semibold group-hover:text-indigo-400 transition">
@@ -451,13 +416,11 @@ export default function BattlesPage() {
                           </div>
                         </div>
                       </div>
-
-                      {/* Status/Action */}
+                      {}
                       <div className="flex flex-col items-end gap-3 w-52">
                         <span className={`px-3 py-1 text-xs font-semibold rounded-full border ${status.className}`}>
                           {status.label}
                         </span>
-
                         {battle.status === 'in_progress' && (
                           <button
                             onClick={() => joinBattleRoom(battle._id)}
@@ -466,7 +429,6 @@ export default function BattlesPage() {
                             Join Battle
                           </button>
                         )}
-
                         {battle.status === 'pending' && awaitingCurrentUser && (
                           <div className="flex gap-2 w-full">
                             <button
@@ -495,13 +457,11 @@ export default function BattlesPage() {
                             </button>
                           </div>
                         )}
-
                         {battle.status === 'pending' && isChallenger && (
                           <p className="text-sm text-gray-400 text-right">
                             Waiting for {opponent?.username || 'opponent'}
                           </p>
                         )}
-
                         {battle.status === 'completed' && (
                           <div className="w-full text-center">
                             {isWinner(battle) ? (
@@ -516,7 +476,6 @@ export default function BattlesPage() {
                             )}
                           </div>
                         )}
-
                         {['declined', 'cancelled'].includes(battle.status) && (
                           <p className="text-sm text-gray-400 text-right">
                             {battle.status === 'declined' ? 'Challenge declined' : 'Challenge cancelled'}
@@ -530,7 +489,6 @@ export default function BattlesPage() {
             </div>
           )}
         </div>
-
         {showCreateModal && (
           <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-30 px-4">
             <div className="w-full max-w-lg bg-gray-900 border border-gray-800 rounded-2xl p-6 shadow-2xl">
@@ -543,7 +501,6 @@ export default function BattlesPage() {
                   <XMarkIcon className="w-5 h-5" />
                 </button>
               </div>
-
               <div className="relative mb-4">
                 <MagnifyingGlassIcon className="w-5 h-5 text-gray-500 absolute left-3 top-1/2 -translate-y-1/2" />
                 <input
@@ -553,7 +510,6 @@ export default function BattlesPage() {
                   className="w-full pl-10 pr-4 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 />
               </div>
-
               <div className="max-h-64 overflow-y-auto space-y-2 pr-1">
                 {filteredOpponents.length === 0 ? (
                   <p className="text-sm text-gray-500 text-center py-6">No developers found.</p>
@@ -577,7 +533,6 @@ export default function BattlesPage() {
                   ))
                 )}
               </div>
-
               <div className="flex justify-end gap-3 mt-6">
                 <button
                   onClick={closeCreateModal}

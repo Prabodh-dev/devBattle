@@ -13,7 +13,6 @@ import {
 import { notificationAPI, battleAPI, userAPI } from '@/lib/api'
 import { toast } from 'react-hot-toast'
 import { useNotificationStore } from '@/lib/store'
-
 interface Notification {
   _id: string
   type: 'battle_challenge' | 'friend_request' | 'message' | 'contest' | 'battle_result'
@@ -23,18 +22,15 @@ interface Notification {
   data?: any
   createdAt: Date
 }
-
 export default function NotificationsPage() {
   const router = useRouter()
   const { notifications, setNotifications, markAsRead: markStoreAsRead, removeNotification } = useNotificationStore()
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [actionLoading, setActionLoading] = useState<string | null>(null)
-
   useEffect(() => {
     loadNotifications()
   }, [])
-
   const loadNotifications = async () => {
     try {
       setLoading(true)
@@ -52,7 +48,6 @@ export default function NotificationsPage() {
       setLoading(false)
     }
   }
-
   const handleMarkAsRead = async (notificationId: string) => {
     try {
       await notificationAPI.markAsRead(notificationId)
@@ -61,7 +56,6 @@ export default function NotificationsPage() {
       console.error('Failed to mark as read:', err)
     }
   }
-
   const handleMarkAllAsRead = async () => {
     try {
       setActionLoading('mark-all')
@@ -74,11 +68,9 @@ export default function NotificationsPage() {
       setActionLoading(null)
     }
   }
-
   const handleAccept = async (notification: Notification) => {
     try {
       setActionLoading(notification._id)
-      
       if (notification.type === 'battle_challenge') {
         const response = await battleAPI.acceptBattle(notification.data.battleId)
         if (response.success) {
@@ -92,7 +84,6 @@ export default function NotificationsPage() {
           window.dispatchEvent(new Event('friends:update'))
         }
       }
-      
       handleMarkAsRead(notification._id)
     } catch (err: any) {
       console.error('Failed to accept:', err)
@@ -101,11 +92,9 @@ export default function NotificationsPage() {
       setActionLoading(null)
     }
   }
-
   const handleDecline = async (notification: Notification) => {
     try {
       setActionLoading(notification._id)
-      
       if (notification.type === 'battle_challenge') {
         const response = await battleAPI.declineBattle(notification.data.battleId)
         if (response.success) {
@@ -118,7 +107,6 @@ export default function NotificationsPage() {
           window.dispatchEvent(new Event('friends:update'))
         }
       }
-      
       handleMarkAsRead(notification._id)
       removeNotification(notification._id)
     } catch (err: any) {
@@ -128,13 +116,10 @@ export default function NotificationsPage() {
       setActionLoading(null)
     }
   }
-
   const handleNotificationClick = (notification: Notification) => {
     if (!notification.read) {
       handleMarkAsRead(notification._id)
     }
-
-    // Navigate based on notification type
     if (notification.type === 'message' && notification.data?.chatId) {
       router.push(`/app/chats?chatId=${notification.data.chatId}`)
     } else if (notification.type === 'battle_result' && notification.data?.battleId) {
@@ -143,7 +128,6 @@ export default function NotificationsPage() {
       router.push(`/app/contests/${notification.data.contestId}`)
     }
   }
-
   const formatTime = (date: Date) => {
     const now = new Date()
     const notifDate = new Date(date)
@@ -151,14 +135,12 @@ export default function NotificationsPage() {
     const minutes = Math.floor(diff / (1000 * 60))
     const hours = Math.floor(diff / (1000 * 60 * 60))
     const days = Math.floor(diff / (1000 * 60 * 60 * 24))
-
     if (minutes < 1) return 'Just now'
     if (minutes < 60) return `${minutes} ${minutes === 1 ? 'minute' : 'minutes'} ago`
     if (hours < 24) return `${hours} ${hours === 1 ? 'hour' : 'hours'} ago`
     if (days < 7) return `${days} ${days === 1 ? 'day' : 'days'} ago`
     return notifDate.toLocaleDateString()
   }
-
   const getIcon = (type: string) => {
     switch (type) {
       case 'battle_challenge':
@@ -174,9 +156,7 @@ export default function NotificationsPage() {
         return <BellIcon className="w-5 h-5 text-gray-400" />
     }
   }
-
   const unreadCount = notifications.filter(n => !n.read).length
-
   if (loading) {
     return (
       <AppLayout>
@@ -189,11 +169,10 @@ export default function NotificationsPage() {
       </AppLayout>
     )
   }
-
   return (
     <AppLayout>
       <div className="h-full overflow-y-auto">
-        {/* Header */}
+        {}
         <div className="bg-gray-950 border-b border-gray-800 p-6">
           <div className="flex items-center justify-between">
             <div>
@@ -213,8 +192,7 @@ export default function NotificationsPage() {
             )}
           </div>
         </div>
-
-        {/* Notifications List */}
+        {}
         <div className="max-w-4xl mx-auto p-6">
           {notifications.length === 0 ? (
             <div className="text-center py-20">
@@ -235,14 +213,13 @@ export default function NotificationsPage() {
                   onClick={() => handleNotificationClick(notification as any)}
                 >
                   <div className="flex items-start gap-4">
-                    {/* Icon */}
+                    {}
                     <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
                       notification.read ? 'bg-gray-900' : 'bg-gray-800'
                     }`}>
                       {getIcon(notification.type)}
                     </div>
-
-                    {/* Content */}
+                    {}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between mb-1">
                         <h3 className="font-semibold">{notification.title}</h3>
@@ -252,8 +229,7 @@ export default function NotificationsPage() {
                       </div>
                       <p className="text-gray-400 text-sm mb-2">{notification.message}</p>
                       <span className="text-xs text-gray-500">{formatTime(notification.createdAt)}</span>
-
-                      {/* Action Buttons */}
+                      {}
                       {(notification.type === 'battle_challenge' || notification.type === 'friend_request') && !notification.read && (
                         <div className="flex gap-2 mt-3">
                           <button

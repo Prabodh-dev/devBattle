@@ -1,8 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import socketService from './socket'
-
-// User type
 interface User {
   _id: string
   username: string
@@ -16,8 +14,6 @@ interface User {
   languages?: string[]
   stats?: Record<string, any>
 }
-
-// Auth Store
 interface AuthState {
   user: User | null
   token: string | null
@@ -28,7 +24,6 @@ interface AuthState {
   updateUser: (user: Partial<User>) => void
   setLoading: (loading: boolean) => void
 }
-
 export const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
@@ -39,14 +34,12 @@ export const useAuthStore = create<AuthState>()(
       login: (user, token) => {
         localStorage.setItem('token', token)
         localStorage.setItem('user', JSON.stringify(user))
-        // Connect socket when user logs in
         socketService.connect(token)
         set({ user, token, isAuthenticated: true, isLoading: false })
       },
       logout: () => {
         localStorage.removeItem('token')
         localStorage.removeItem('user')
-        // Disconnect socket when user logs out
         socketService.disconnect()
         set({ user: null, token: null, isAuthenticated: false, isLoading: false })
       },
@@ -62,8 +55,6 @@ export const useAuthStore = create<AuthState>()(
     }
   )
 )
-
-// Chat Store
 interface Message {
   _id: string
   sender: User
@@ -72,7 +63,6 @@ interface Message {
   timestamp: Date
   read?: boolean
 }
-
 interface Chat {
   _id: string
   participants: User[]
@@ -80,7 +70,6 @@ interface Chat {
   unreadCount: number
   updatedAt: Date
 }
-
 interface ChatState {
   chats: Chat[]
   currentChat: Chat | null
@@ -94,7 +83,6 @@ interface ChatState {
   setTyping: (userId: string, isTyping: boolean) => void
   markAsRead: (chatId: string) => void
 }
-
 export const useChatStore = create<ChatState>((set) => ({
   chats: [],
   currentChat: null,
@@ -124,8 +112,6 @@ export const useChatStore = create<ChatState>((set) => ({
       ),
     })),
 }))
-
-// Battle Store
 interface Battle {
   _id: string
   participants: User[]
@@ -137,7 +123,6 @@ interface Battle {
   startedAt?: Date
   completedAt?: Date
 }
-
 interface BattleState {
   battles: Battle[]
   currentBattle: Battle | null
@@ -146,7 +131,6 @@ interface BattleState {
   updateBattle: (battleId: string, updates: Partial<Battle>) => void
   addSubmission: (battleId: string, submission: any) => void
 }
-
 export const useBattleStore = create<BattleState>((set) => ({
   battles: [],
   currentBattle: null,
@@ -178,8 +162,6 @@ export const useBattleStore = create<BattleState>((set) => ({
           : state.currentBattle,
     })),
 }))
-
-// Contest Store
 interface Contest {
   _id: string
   title: string
@@ -190,7 +172,6 @@ interface Contest {
   participants: User[]
   status: string
 }
-
 interface ContestState {
   contests: Contest[]
   currentContest: Contest | null
@@ -200,7 +181,6 @@ interface ContestState {
   setLeaderboard: (leaderboard: any[]) => void
   updateContest: (contestId: string, updates: Partial<Contest>) => void
 }
-
 export const useContestStore = create<ContestState>((set) => ({
   contests: [],
   currentContest: null,
@@ -219,8 +199,6 @@ export const useContestStore = create<ContestState>((set) => ({
           : state.currentContest,
     })),
 }))
-
-// Notification Store
 interface Notification {
   _id: string
   type: string
@@ -231,7 +209,6 @@ interface Notification {
   createdAt: Date
   relatedFriendRequest?: string
 }
-
 interface NotificationState {
   notifications: Notification[]
   unreadCount: number
@@ -241,7 +218,6 @@ interface NotificationState {
   markAllAsRead: () => void
   removeNotification: (notificationId: string) => void
 }
-
 export const useNotificationStore = create<NotificationState>((set) => ({
   notifications: [],
   unreadCount: 0,
@@ -272,8 +248,6 @@ export const useNotificationStore = create<NotificationState>((set) => ({
       notifications: state.notifications.filter((n) => n._id !== notificationId),
     })),
 }))
-
-// UI Store (for app-wide UI state)
 interface UIState {
   sidebarCollapsed: boolean
   rightPanelOpen: boolean
@@ -282,7 +256,6 @@ interface UIState {
   toggleRightPanel: () => void
   setTheme: (theme: 'light' | 'dark') => void
 }
-
 export const useUIStore = create<UIState>()(
   persist(
     (set) => ({

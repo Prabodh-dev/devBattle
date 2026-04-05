@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
-
 const userSchema = new mongoose.Schema(
   {
     username: {
@@ -80,8 +79,6 @@ const userSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
-
-// Hash password before saving
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) {
     return next();
@@ -90,13 +87,9 @@ userSchema.pre('save', async function (next) {
   this.password = await bcrypt.hash(this.password, salt);
   next();
 });
-
-// Method to compare passwords
 userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
-
-// Update rank based on rating
 userSchema.methods.updateRank = function () {
   if (this.rating >= 2400) this.rank = 'Grandmaster';
   else if (this.rating >= 2000) this.rank = 'Master';
@@ -104,5 +97,4 @@ userSchema.methods.updateRank = function () {
   else if (this.rating >= 1200) this.rank = 'Coder';
   else this.rank = 'Beginner';
 };
-
 module.exports = mongoose.model('User', userSchema);

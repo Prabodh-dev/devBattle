@@ -1,19 +1,15 @@
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useAuthStore } from '@/lib/store'
-
 interface ProtectedRouteProps {
   children: React.ReactNode
 }
-
 export default function ProtectedRoute({ children }: ProtectedRouteProps) {
   const router = useRouter()
   const { isAuthenticated, isLoading, setLoading, login } = useAuthStore()
-
   useEffect(() => {
     const token = localStorage.getItem('token')
     const storedUser = localStorage.getItem('user')
-
     if (token && storedUser) {
       if (!isAuthenticated) {
         try {
@@ -29,11 +25,9 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
       setLoading(false)
       return
     }
-
     setLoading(false)
     router.replace('/login')
   }, [isAuthenticated, login, router, setLoading])
-
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-900 flex items-center justify-center">
@@ -44,10 +38,8 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
       </div>
     )
   }
-
   if (!isAuthenticated) {
     return null
   }
-
   return <>{children}</>
 }

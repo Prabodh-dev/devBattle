@@ -4,7 +4,6 @@ import AppLayout from '@/components/layout/AppLayout'
 import { UsersIcon, PlusIcon, ChatBubbleLeftRightIcon } from '@heroicons/react/24/outline'
 import { groupAPI } from '@/lib/api'
 import { useAuthStore } from '@/lib/store'
-
 interface Group {
   _id: string
   name: string
@@ -15,7 +14,6 @@ interface Group {
   lastActivity: string
   createdBy: string
 }
-
 export default function GroupsPage() {
   const router = useRouter()
   const { user } = useAuthStore()
@@ -30,11 +28,9 @@ export default function GroupsPage() {
     description: '',
     privacy: 'public'
   })
-
   useEffect(() => {
     loadGroups()
   }, [])
-
   const loadGroups = async () => {
     try {
       setLoading(true)
@@ -52,15 +48,12 @@ export default function GroupsPage() {
       setLoading(false)
     }
   }
-
   const handleCreateGroup = async (e: React.FormEvent) => {
     e.preventDefault()
-    
     if (!formData.name.trim()) {
       alert('Please enter a group name')
       return
     }
-
     try {
       setCreateLoading(true)
       const response = await groupAPI.createGroup({
@@ -68,13 +61,10 @@ export default function GroupsPage() {
         description: formData.description,
         members: []
       })
-
       if (response.success) {
         setGroups([response.data, ...groups])
         setShowCreateModal(false)
         setFormData({ name: '', description: '', privacy: 'public' })
-        // Optionally navigate to the new group
-        // router.push(`/app/groups/${response.data._id}`)
       } else {
         alert(response.message || 'Failed to create group')
       }
@@ -85,12 +75,9 @@ export default function GroupsPage() {
       setCreateLoading(false)
     }
   }
-
   const handleOpenGroup = (groupId: string) => {
-    // Navigate to group chat
     router.push(`/app/groups/${groupId}`)
   }
-
   const formatLastActivity = (date: string) => {
     const now = new Date()
     const activityDate = new Date(date)
@@ -98,7 +85,6 @@ export default function GroupsPage() {
     const minutes = Math.floor(diff / (1000 * 60))
     const hours = Math.floor(diff / (1000 * 60 * 60))
     const days = Math.floor(diff / (1000 * 60 * 60 * 24))
-
     if (minutes < 1) return 'Just now'
     if (minutes < 60) return `${minutes}m ago`
     if (hours < 24) return `${hours}h ago`
@@ -106,7 +92,6 @@ export default function GroupsPage() {
     if (days < 7) return `${days}d ago`
     return activityDate.toLocaleDateString()
   }
-
   if (loading) {
     return (
       <AppLayout>
@@ -119,11 +104,10 @@ export default function GroupsPage() {
       </AppLayout>
     )
   }
-
   return (
     <AppLayout>
       <div className="h-full overflow-y-auto">
-        {/* Header */}
+        {}
         <div className="bg-gray-950 border-b border-gray-800 p-6">
           <div className="flex items-center justify-between mb-4">
             <div>
@@ -138,8 +122,7 @@ export default function GroupsPage() {
               Create Group
             </button>
           </div>
-
-          {/* Tabs */}
+          {}
           <div className="flex gap-4">
             <button 
               onClick={() => setTab('my-groups')}
@@ -159,8 +142,7 @@ export default function GroupsPage() {
             </button>
           </div>
         </div>
-
-        {/* Error State */}
+        {}
         {error && (
           <div className="p-6">
             <div className="bg-red-900/20 border border-red-700 rounded-lg p-4 text-red-400">
@@ -174,8 +156,7 @@ export default function GroupsPage() {
             </div>
           </div>
         )}
-
-        {/* Groups List */}
+        {}
         <div className="p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {groups.map((group) => (
@@ -194,12 +175,10 @@ export default function GroupsPage() {
                     </span>
                   ) : null}
                 </div>
-
                 <h3 className="text-lg font-bold mb-1 group-hover:text-indigo-400 transition">
                   {group.name}
                 </h3>
                 <p className="text-sm text-gray-400 mb-3 line-clamp-2">{group.description}</p>
-
                 <div className="flex items-center justify-between text-sm">
                   <div className="flex items-center gap-1 text-gray-400">
                     <UsersIcon className="w-4 h-4" />
@@ -207,7 +186,6 @@ export default function GroupsPage() {
                   </div>
                   <span className="text-gray-500">{formatLastActivity(group.lastActivity)}</span>
                 </div>
-
                 <button 
                   onClick={(e) => {
                     e.stopPropagation()
@@ -220,7 +198,6 @@ export default function GroupsPage() {
               </div>
             ))}
           </div>
-
           {groups.length === 0 && !loading && !error && (
             <div className="text-center py-20">
               <UsersIcon className="w-16 h-16 mx-auto mb-4 text-gray-600" />
@@ -236,13 +213,11 @@ export default function GroupsPage() {
           )}
         </div>
       </div>
-
-      {/* Create Group Modal */}
+      {}
       {showCreateModal && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
           <div className="bg-gray-800 rounded-2xl p-6 max-w-md w-full border border-gray-700">
             <h2 className="text-xl font-bold mb-4">Create New Group</h2>
-            
             <form onSubmit={handleCreateGroup} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium mb-2">Group Name</label>
@@ -255,7 +230,6 @@ export default function GroupsPage() {
                   required
                 />
               </div>
-
               <div>
                 <label className="block text-sm font-medium mb-2">Description</label>
                 <textarea
@@ -266,7 +240,6 @@ export default function GroupsPage() {
                   className="w-full px-4 py-2 bg-gray-900 border border-gray-700 rounded-lg focus:outline-none focus:border-indigo-500 resize-none"
                 />
               </div>
-
               <div>
                 <label className="block text-sm font-medium mb-2">Privacy</label>
                 <select 
@@ -278,7 +251,6 @@ export default function GroupsPage() {
                   <option value="private">Private - Invite only</option>
                 </select>
               </div>
-
               <div className="flex gap-3 pt-4">
                 <button
                   type="button"

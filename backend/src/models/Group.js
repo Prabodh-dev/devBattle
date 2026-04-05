@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-
 const groupSchema = new mongoose.Schema(
   {
     name: {
@@ -63,10 +62,7 @@ const groupSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
-
-// Virtual for member count
 groupSchema.virtual('memberCount').get(function () {
   return this.members.length;
 });
-
 module.exports = mongoose.model('Group', groupSchema);

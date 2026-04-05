@@ -3,7 +3,6 @@ import { useRouter } from 'next/router'
 import AppLayout from '@/components/layout/AppLayout'
 import CodeEditor from '@/components/common/CodeEditor'
 import { ClockIcon, TrophyIcon, UserIcon, CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline'
-
 interface Battle {
   _id: string
   problem: {
@@ -33,27 +32,23 @@ interface Battle {
     submittedAt: string
   }>
 }
-
 export default function BattlePage() {
   const router = useRouter()
   const { battleId } = router.query
   const [currentUserId] = useState('user123')
   const [language, setLanguage] = useState('javascript')
-  const [code, setCode] = useState('// Write your solution here\nfunction solve(nums, target) {\n  // Your code\n}')
-  const [timeRemaining, setTimeRemaining] = useState(900) // 15 minutes
+  const [code, setCode] = useState('
+  const [timeRemaining, setTimeRemaining] = useState(900) 
   const [output, setOutput] = useState('')
   const [testResults, setTestResults] = useState<Array<{ passed: boolean; input: string; expected: string; actual: string }>>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
-
   const battle: Battle = {
     _id: 'battle1',
     problem: {
       title: 'Two Sum',
       difficulty: 'Easy',
       description: `Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
-
 You may assume that each input would have exactly one solution, and you may not use the same element twice.
-
 You can return the answer in any order.`,
       examples: [
         {
@@ -92,7 +87,6 @@ You can return the answer in any order.`,
     startedAt: new Date().toISOString(),
     submissions: []
   }
-
   useEffect(() => {
     const timer = setInterval(() => {
       setTimeRemaining(prev => {
@@ -103,16 +97,13 @@ You can return the answer in any order.`,
         return prev - 1
       })
     }, 1000)
-
     return () => clearInterval(timer)
   }, [])
-
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60)
     const secs = seconds % 60
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
   }
-
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
       case 'Easy': return 'text-green-400'
@@ -121,10 +112,8 @@ You can return the answer in any order.`,
       default: return 'text-gray-400'
     }
   }
-
   const handleRun = async () => {
     setOutput('Running test cases...')
-    // Simulate running code
     setTimeout(() => {
       setOutput('Test case 1: Passed\nTest case 2: Passed\nTest case 3: Failed\n\nExpected: [0,1]\nGot: [1,0]')
       setTestResults([
@@ -134,22 +123,18 @@ You can return the answer in any order.`,
       ])
     }, 1000)
   }
-
   const handleSubmit = async () => {
     setIsSubmitting(true)
-    // Simulate submission
     setTimeout(() => {
       setIsSubmitting(false)
       alert('Code submitted! Running all test cases...')
     }, 1000)
   }
-
   const rightPanelContent = (
     <div className="p-4">
       <h3 className="text-lg font-bold mb-4">Battle Info</h3>
-      
       <div className="space-y-4">
-        {/* Timer */}
+        {}
         <div className="bg-gray-800 rounded-lg p-4">
           <div className="flex items-center gap-2 text-gray-400 mb-2">
             <ClockIcon className="w-4 h-4" />
@@ -159,8 +144,7 @@ You can return the answer in any order.`,
             {formatTime(timeRemaining)}
           </div>
         </div>
-
-        {/* Participants */}
+        {}
         <div className="space-y-2">
           <div className="bg-green-900/20 border border-green-700 rounded-lg p-3">
             <div className="flex items-center justify-between mb-1">
@@ -176,9 +160,7 @@ You can return the answer in any order.`,
               {battle.submissions.filter(s => s.user === currentUserId).length} submissions
             </div>
           </div>
-
           <div className="text-center text-gray-500 text-sm font-semibold">VS</div>
-
           <div className="bg-red-900/20 border border-red-700 rounded-lg p-3">
             <div className="flex items-center justify-between mb-1">
               <div className="flex items-center gap-2">
@@ -194,8 +176,7 @@ You can return the answer in any order.`,
             </div>
           </div>
         </div>
-
-        {/* Status */}
+        {}
         <div className="bg-gray-800 rounded-lg p-4">
           <h4 className="text-sm font-semibold mb-2">Battle Status</h4>
           <div className="space-y-1 text-sm text-gray-400">
@@ -209,11 +190,10 @@ You can return the answer in any order.`,
       </div>
     </div>
   )
-
   return (
     <AppLayout showRightPanel={true} rightPanelContent={rightPanelContent}>
       <div className="flex h-full">
-        {/* Problem Panel */}
+        {}
         <div className="w-1/2 border-r border-gray-800 overflow-y-auto p-6">
           <div className="flex items-center justify-between mb-4">
             <h1 className="text-2xl font-bold">{battle.problem.title}</h1>
@@ -221,12 +201,10 @@ You can return the answer in any order.`,
               {battle.problem.difficulty}
             </span>
           </div>
-
           <div className="prose prose-invert max-w-none">
             <div className="mb-6">
               <p className="text-gray-300 leading-relaxed whitespace-pre-line">{battle.problem.description}</p>
             </div>
-
             <div className="mb-6">
               <h3 className="text-lg font-semibold mb-3">Examples</h3>
               {battle.problem.examples.map((example, index) => (
@@ -248,7 +226,6 @@ You can return the answer in any order.`,
                 </div>
               ))}
             </div>
-
             <div className="mb-6">
               <h3 className="text-lg font-semibold mb-3">Constraints</h3>
               <ul className="list-disc list-inside space-y-1 text-gray-300">
@@ -259,8 +236,7 @@ You can return the answer in any order.`,
             </div>
           </div>
         </div>
-
-        {/* Code Editor Panel */}
+        {}
         <div className="w-1/2 flex flex-col">
           <div className="flex-1 p-4">
             <div className="mb-4">
@@ -277,7 +253,6 @@ You can return the answer in any order.`,
                 <option value="c">C</option>
               </select>
             </div>
-
             <CodeEditor
               language={language}
               value={code}
@@ -287,8 +262,7 @@ You can return the answer in any order.`,
               height="calc(100vh - 300px)"
             />
           </div>
-
-          {/* Test Results */}
+          {}
           <div className="h-48 border-t border-gray-800 bg-gray-950 overflow-y-auto">
             <div className="p-4">
               <div className="flex items-center justify-between mb-3">
@@ -299,7 +273,6 @@ You can return the answer in any order.`,
                   </span>
                 )}
               </div>
-              
               {output ? (
                 <div>
                   {testResults.length > 0 ? (

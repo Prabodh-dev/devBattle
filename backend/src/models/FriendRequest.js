@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-
 const friendRequestSchema = new mongoose.Schema(
   {
     sender: {
@@ -26,8 +25,5 @@ const friendRequestSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
-
-// Prevent duplicate friend requests
 friendRequestSchema.index({ sender: 1, recipient: 1 }, { unique: true });
-
 module.exports = mongoose.model('FriendRequest', friendRequestSchema);

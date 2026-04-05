@@ -1,10 +1,3 @@
-# Environment variables
-.env
-.env.local
-.env.production
-.env.development
-
-# Dependencies
 node_modules/
 __pycache__/
 *.pyc
@@ -17,51 +10,79 @@ venv/
 env/
 ENV/
 
-# Build outputs
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+.env.*.local
+
 .next/
 out/
 dist/
 build/
 *.tsbuildinfo
+.turbo
 
-# Logs
 logs/
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
+pnpm-debug.log*
 
-# OS files
 .DS_Store
 Thumbs.db
 *.swp
 *.swo
 *~
+.Spotlight-V100
+.Trashes
 
-# IDE
 .vscode/
 .idea/
 *.sublime-project
 *.sublime-workspace
+*.iml
+.project
+.classpath
+.settings/
 
-# Testing
 coverage/
 .nyc_output
+*.lcov
+.jest-cache
 
-# Docker
 docker-compose.override.yml
+*.pid
+*.seed
+*.pid.lock
 
-# Data
 data/
 *.sqlite
+*.sqlite3
 *.db
 
-# Uploads
 uploads/
 temp/
-
-# Misc
-.cache/
+tmp/
 .temp/
 .tmp/
+
+.cache/
+.parcel-cache
+.eslintcache
+.stylelintcache
+.prettiercache
+
+*.pem
+*.key
+*.cert
+*.crt
+
+.vercel
+.netlify
+.serverless/
+
+remove-comments.js

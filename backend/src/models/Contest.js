@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-
 const contestSchema = new mongoose.Schema(
   {
     title: {
@@ -43,7 +42,7 @@ const contestSchema = new mongoose.Schema(
       required: true,
     },
     duration: {
-      type: Number, // in milliseconds
+      type: Number, 
       required: true,
     },
     status: {
@@ -91,10 +90,7 @@ const contestSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
-
-// Index for efficient querying
 contestSchema.index({ group: 1 });
 contestSchema.index({ status: 1 });
 contestSchema.index({ startTime: 1 });
-
 module.exports = mongoose.model('Contest', contestSchema);
